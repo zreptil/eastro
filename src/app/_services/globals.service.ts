@@ -3,6 +3,11 @@ import {Utils} from '@/classes/utils';
 import {Log} from '@/_services/log.service';
 import {HttpClient, HttpRequest} from '@angular/common/http';
 import {lastValueFrom, throwError, timeout} from 'rxjs';
+import {oauth2SyncType} from '@/_services/sync/oauth2pkce';
+import {LangData} from '@/_model/lang-data';
+import {SyncService} from '@/_services/sync/sync.service';
+import {LanguageService} from '@/_services/language.service';
+import {EnvironmentService} from '@/_services/environment.service';
 
 class CustomTimeoutError extends Error {
   constructor() {
@@ -27,6 +32,7 @@ export class GlobalsService {
   storageVersion: string;
   currentPage: string;
   language: LangData;
+  theme: string;
   _syncType: oauth2SyncType;
   oauth2AccessToken: string = null;
   private flags = '';
@@ -46,20 +52,6 @@ export class GlobalsService {
         this.currentPage = 'main';
       }
     });
-  }
-
-  private _links: LinkData[];
-
-  public get links(): LinkData[] {
-    const ret = this._links?.filter(e => e) ?? [];
-    switch (this.sortOrder) {
-      case 'lastUsed':
-        ret.sort((a, b) => {
-          return -Utils.compare(a.lastUsed ?? 0, b.lastUsed ?? 0);
-        });
-        break;
-    }
-    return ret;
   }
 
   _isDebug = false;
