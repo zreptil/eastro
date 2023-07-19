@@ -1,0 +1,36 @@
+<div animallist panel property-panel>
+  <div (click)="activateAnimal(animal.key)"
+       *ngFor="let animal of globals.listAnimals"
+       [class]="classForAnimal(animal.key)"
+       property>
+    <div name>{{animal.name}}</div>
+    <img [src]="imgForAnimal(animal.key)" alt="animal image">
+  </div>
+</div>
+<div panel>
+  <div property-panel>
+    <!-- mat-form-field>
+      <mat-label>Datum</mat-label>
+      <input [(ngModel)]="currDate" [matDatepicker]="dp" matInput>
+      <mat-datepicker-toggle [for]="dp" matSuffix></mat-datepicker-toggle>
+      <mat-datepicker #dp></mat-datepicker>
+    </mat-form-field -->
+    <mat-card class="demo-inline-calendar-card">
+      <mat-calendar [(selected)]="currDate"></mat-calendar>
+    </mat-card>
+    <div (click)="changeDate()" property>
+      <div name>Tagestier</div>
+      {{test}}
+      <img [src]="imgForAnimal(globals.getDayAnimal(currDate))" alt="animal image">
+    </div>
+    <div property>
+      <div name>Vorteilhafte Tätigkeiten</div>
+      {{['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'][globals.activityIdFor(currDate, currAnimal) - 1]}}
+      <div [innerHtml]="globals.meaningHtmlFor('dayPro', globals.activityIdFor(currDate, +currAnimal))"></div>
+    </div>
+    <div property>
+      <div name>Zu vermeidende Dinge</div>
+      <div [innerHtml]="globals.meaningHtmlFor('dayContra', globals.activityIdFor(currDate, +currAnimal))"></div>
+    </div>
+  </div>
+</div>

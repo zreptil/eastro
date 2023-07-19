@@ -8,6 +8,8 @@ import {LangData} from '@/_model/lang-data';
 import {SyncService} from '@/_services/sync/sync.service';
 import {LanguageService} from '@/_services/language.service';
 import {EnvironmentService} from '@/_services/environment.service';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {ZodiacEventData} from '@/_model/zodiac-event-data';
 
 class CustomTimeoutError extends Error {
   constructor() {
@@ -35,12 +37,29 @@ export class GlobalsService {
   theme: string;
   _syncType: oauth2SyncType;
   oauth2AccessToken: string = null;
+  genders = [
+    {'type': 'Yang', 'name': $localize`männlich`, 'color': 'white'},
+    {'type': 'Yin', 'name': $localize`weiblich`, 'color': 'black'}
+  ];
+  public zodiacEvent: ZodiacEventData = null;
+  public zodiacData: any;
+  svgCollection: SafeHtml;
+  public listAnimals: any[] = [];
+  public colors: any = {
+    gruen: {fill: 'var(--elem-1-back)', text: 'var(--elem-1-fore)'},
+    rot: {fill: 'var(--elem-2-back)', text: 'var(--elem-2-fore)'},
+    gelb: {fill: 'var(--elem-3-back)', text: 'var(--elem-3-fore)'},
+    weiss: {fill: 'var(--elem-4-back)', text: 'var(--elem-4-fore)'},
+    blau: {fill: 'var(--elem-5-back)', text: 'var(--elem-5-fore)'}
+  };
   private flags = '';
 
   constructor(public http: HttpClient,
               public sync: SyncService,
               public ls: LanguageService,
-              public env: EnvironmentService) {
+              public env: EnvironmentService,
+              public sanitizer: DomSanitizer) {
+
     GLOBALS = this;
     this.loadWebData();
     this.loadSharedData().then(_ => {
@@ -97,6 +116,14 @@ export class GlobalsService {
     return document.querySelector('head>title').innerHTML;
   }
 
+  public propsForElement(id: string | number): any[] {
+    return this.zodiacData?.props?.filter((p: any) => p.type === 'element' && +p.typeId === +id);
+  }
+
+  public nameForElement(id: string | number): string {
+    return this.zodiacData?.elements?.[id]?.name;
+  }
+
   async loadSharedData() {
     let storage: any = {};
     try {
@@ -115,6 +142,29 @@ export class GlobalsService {
 
     this.storageVersion = storage.s1;
     // validate values
+    if (this.svgCollection == null) {
+      this.svgCollection = {};
+      this.request('assets/images/images.svg', {options: {responseType: 'text'}}).then(result => {
+        this.svgCollection = this.sanitizer.bypassSecurityTrustHtml(result.body);
+      });
+    }
+    if (this.zodiacData == null) {
+      this.zodiacData = {};
+      this.request('assets/zodiac.json').then(result => {
+        const data = result.body;
+        for (const key of Object.keys(data['years'])) {
+          const value = data.years[key].start;
+          data.years[key].start = new Date(+key, +value.substring(0, 2) - 1, +value.substring(2, 4));
+        }
+        this.zodiacData = data;
+        const list = [];
+        for (const key of Object.keys(data?.animals ?? {})) {
+          list.push({...data?.animals[key], key: key});
+        }
+        this.listAnimals = list;
+        console.log(this.zodiacData);
+      });
+    }
   }
 
   saveSharedData(): void {
@@ -158,9 +208,6 @@ export class GlobalsService {
     localStorage.setItem('webData', JSON.stringify(storage));
   }
 
-  private may(key: string): boolean {
-    return this.flags.indexOf(`|${key}|`) >= 0;
-  }
   async requestJson(url: string, params?: { method?: string, options?: any, body?: any, showError?: boolean, asJson?: boolean, timeout?: number }) {
     return this.request(url, params).then(response => {
       return response?.body;
@@ -174,7 +221,9 @@ export class GlobalsService {
     params.asJson ??= false;
     params.timeout ??= 1000;
     let response;
-    const req = new HttpRequest(params.method, url,
+    const req = new HttpRequest(
+      params.method,
+      url,
       null,
       params.options);
     try {
@@ -194,7 +243,7 @@ export class GlobalsService {
       }
     } catch (ex: any) {
       if (ex instanceof CustomTimeoutError) {
-        response = $localize`There was no answer within ${params.timeout / 1000} seconds at ${url}`;
+        response = `There was no answer within ${params.timeout / 1000} seconds at ${url}`;
       } else if (ex?.messge != null) {
         response = ex.message;
       } else {
@@ -202,5 +251,73 @@ export class GlobalsService {
       }
     }
     return params.asJson ? response.body : response;
+  }
+
+  meaningHtmlFor(type: string, lookup: number): SafeHtml {
+    const meaning: any = this.zodiacData?.meanings?.find((m: any) => m.type === type && +m.lookup === +lookup);
+    if (meaning == null) {
+      return `Es sind noch keine Daten verfügbar.`;
+    }
+    let ret = `<span>${meaning.info}</span>`;
+    return this.sanitizer.bypassSecurityTrustHtml(ret);
+  }
+
+  activityIdFor(date: Date, idAnimal: number | string): number {
+//    date = new Date(2023, 0, 2);
+
+    const dayanimal = this.getDayAnimal(date);
+
+    const m = date.getMonth() + 1;
+    const d = date.getDate();
+    const month = this.zodiacData.months.find((month: any) =>
+      (month.begmonth <= m && month.endmonth > m)
+      || (month.begmonth === m &&
+        (month.begday <= d || month.endday >= d)));
+
+    console.log(month, dayanimal, idAnimal);
+
+    let ret = ((+month.idx - 1) + (+dayanimal - 1) - (+idAnimal - 1)) % 12;
+    while (ret >= 12) {
+      ret -= 12;
+    }
+    while (ret < 0) {
+      ret += 12;
+    }
+    return ret + 1;
+  }
+
+  /**
+   * gets the animal for the given date.
+   * @param date date to retrieve the animal for
+   * @returns the animal for the given date (1 - 12)
+   */
+  getDayAnimal(date: Date): number {
+    // Das Tagestier am 1.1.1583 war Schlange
+    const days = Utils.differenceInDays(date, new Date(1583, 0, 1));
+    const dayanimal = 6;
+    const ret = (days + dayanimal - 1) % 12 + 1;
+    console.log('dayanimal', ret, days, Utils.fmtDate(date), date);
+    return ret <= 0 ? 12 + ret : ret;
+  }
+
+  styleForElement(idx: string, def: string): any {
+    const elem = GLOBALS.zodiacData?.elements?.[def];
+    let key = elem?.[idx] ?? def;
+    const prop = GLOBALS.propsForElement(key)?.find((p: any) => p.name === 'Farbe');
+    const color = this.colors[prop?.['property']] ?? {fill: 'initial', text: 'black'};
+    const ret: any = {'--hand-fill': color.fill, '--fist-fill': color.fill, '--text': color.text};
+    return ret;
+  }
+
+  elementForAnimal(animal: any): string {
+    return '';
+  }
+
+  getAnimalElement(key: string): string {
+    return this.listAnimals.find(a => +a.key === +key)?.element;
+  }
+
+  private may(key: string): boolean {
+    return this.flags.indexOf(`|${key}|`) >= 0;
   }
 }

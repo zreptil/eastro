@@ -1,7 +1,7 @@
 :host {
   width: 100%;
   height: 100%;
-  --size: 30px;
+  --img-size: 30px;
 }
 
 canvas {
@@ -9,8 +9,8 @@ canvas {
 }
 
 [color-select] {
-  width: var(--size);
-  height: var(--size);
+  width: var(--img-size);
+  height: var(--img-size);
   border: 1px solid black;
   border-radius: 50%;
   cursor: pointer;
@@ -26,7 +26,7 @@ canvas {
 
 [canvas-container] {
   position: relative;
-  padding: calc(var(--size) / 2);
+  padding: calc(var(--img-size) / 2);
 
   [image] {
     display: flex;
@@ -57,10 +57,10 @@ canvas {
 }
 
 [color-wheel] {
-  --size: 12em;
-  --col-size: var(--size) / 3.7;
-  width: var(--size);
-  height: var(--size);
+  --img-size: 12em;
+  --col-size: var(--img-size) / 3.7;
+  width: var(--img-size);
+  height: var(--img-size);
   background-color: transparent;
   position: absolute;
   z-index: 100;
@@ -73,8 +73,8 @@ canvas {
   [color] {
     position: absolute;
     left: calc(50% - calc(var(--col-size) / 2));
-    top: calc(50% - calc(var(--size) / 2));
-    transform-origin: center calc(var(--size) / 2);
+    top: calc(50% - calc(var(--img-size) / 2));
+    transform-origin: center calc(var(--img-size) / 2);
     width: calc(var(--col-size));
     height: calc(var(--col-size));
     border-radius: 50%;

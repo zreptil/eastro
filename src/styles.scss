@@ -144,6 +144,22 @@ body {
   --mainHeaderFore: var(--toolbarFore);
   --mainBodyBack: inherit;
   --mainBodyFore: inherit;
+
+  --card-back: rgba(255, 255, 255, 0.3);
+  --card-current-back: rgba(255, 255, 255, 0.5);
+  --card-name-fore: rgba(0, 0, 0, 0.8);
+
+  --elem-1-back: #808152;
+  --elem-2-back: #bd0e0d;
+  --elem-3-back: #d09c15;
+  --elem-4-back: #c7b0b3;
+  --elem-5-back: #4d4797;
+
+  --elem-1-fore: rgba(255, 255, 255, 0.8);
+  --elem-2-fore: rgba(255, 255, 255, 0.8);
+  --elem-3-fore: rgba(0, 0, 0, 0.7);
+  --elem-4-fore: rgba(0, 0, 0, 0.7);
+  --elem-5-fore: rgba(255, 255, 255, 0.5);
 }
 
 mat-icon[small] {
@@ -316,4 +332,68 @@ img[alt=favicon] {
 
 html {
   overflow: hidden !important;
+}
+
+div[property-panel] {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  gap: 0.3em;
+
+  div[property] {
+    display: flex;
+    flex-flow: column;
+    border-radius: 0.5em;
+    border: 1px solid rgba(0, 0, 0, 0.6);
+    padding: 0.4em;
+    min-width: 7em;
+    max-width: 10em;
+    background: var(--card-back);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    div[name] {
+      font-size: 0.75em;
+      font-weight: bold;
+      color: var(--card-name-fore);
+    }
+
+    div[value] {
+      word-wrap: break-word;
+    }
+  }
+
+  div[property].current {
+    background-color: var(--card-current-back);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0.0;
+  }
+  100% {
+    opacity: 1.0;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1.0;
+  }
+  100% {
+    opacity: 0.0;
+  }
+}
+
+@keyframes furz {
+  0% {
+    color: var(--ff);
+    background-color: var(--bf);
+  }
+  100% {
+    color: var(--ft);
+    background-color: var(--bt);
+  }
 }

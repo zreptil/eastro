@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
 import {DialogComponent} from '@/components/dialog/dialog.component';
 import {ColorPickerComponent} from '@/controls/color-picker/color-picker.component';
 import {ColorPickerDialog} from '@/controls/color-picker/color-picker-dialog';
@@ -20,6 +20,8 @@ import {WhatsNewComponent} from '@/components/whats-new/whats-new.component';
 import {ImpressumComponent} from '@/components/impressum/impressum.component';
 import {ProgressComponent} from '@/components/progress/progress.component';
 import {AutofocusDirective} from '@/_directives/autofocus.directive';
+import {ElementsComponent} from '@/components/elements/elements.component';
+import {AnimalsComponent} from './components/animals/animals.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,8 @@ import {AutofocusDirective} from '@/_directives/autofocus.directive';
     MainComponent,
     WelcomeComponent,
     ImpressumComponent,
+    ElementsComponent,
+    AnimalsComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,4 +53,5 @@ import {AutofocusDirective} from '@/_directives/autofocus.directive';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

@@ -1,0 +1,510 @@
+:host {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  height: initial;
+
+  ::-webkit-scrollbar {
+    width: auto;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: var(--secondaryBack);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--primaryBack);
+  }
+}
+
+material-button {
+  text-transform: none;
+  font-size: 1.2em;
+
+  svg.google {
+    width: 1em;
+  }
+}
+
+material-fab {
+  background: white !important;
+
+  svg.google {
+    width: 24px;
+  }
+
+  ::ng-deep .content {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  img.google {
+    width: 100%;
+    border-radius: 50%;
+  }
+}
+
+div[title] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em;
+  font-size: 1.5em;
+
+  .gender {
+    width: 40px;
+    margin-left: 10px;
+  }
+}
+
+div[panel] {
+  margin: 0.2em;
+}
+
+div[elemview] {
+  --borderSize: 8px;
+  --img-size: 40px;
+  --svgSize: 30px;
+  --orgX: var(--borderSize);
+  --orgY: var(--borderSize);
+  --imgX: calc(var(--orgX) + var(--img-size) + var(--svgSize));
+  --imgY: calc(var(--orgY) + var(--img-size) + var(--svgSize));
+  --imgDeX: var(--imgX);
+  --imgDeY: var(--orgY);
+  --svgDeX: calc(var(--imgDeX) - (var(--svgSize) - var(--img-size)) / 2);
+  --svgDeY: calc(var(--imgDeY) + var(--img-size));
+  --imgDbX: var(--imgX);
+  --imgDbY: calc(var(--svgDbY) + var(--svgSize));
+  --svgDbX: var(--svgDeX);
+  --svgDbY: calc(var(--imgY) + var(--img-size));
+  --imgCbX: var(--orgX);
+  --imgCbY: var(--imgY);
+  --svgCbX: calc(var(--imgCbX) + var(--img-size));
+  --svgCbY: calc(var(--imgY) - (var(--svgSize) - var(--img-size)) / 2);
+  --svgCrX: calc(var(--imgX) + var(--img-size));
+  --svgCrY: var(--svgCbY);
+  --imgCrX: calc(var(--svgCrX) + var(--svgSize));
+  --imgCrY: var(--imgCbY);
+  --w: calc(var(--img-size) * 3 + var(--svgSize) * 2 + var(--borderSize) * 2);
+  --h: calc(var(--img-size) * 3 + var(--svgSize) * 2 + var(--borderSize) * 2);
+
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  background-color: var(--hand-fill);
+  color: var(--text);
+  border-radius: 2em;
+
+  div[name] {
+    display: flex;
+    padding: 1em;
+    font-weight: bold;
+  }
+}
+
+div[elemview][video] {
+  position: relative;
+  padding: 2em;
+  border-radius: 0;
+  --img-size: 80px;
+  --img-size1: 150px;
+  --h1: calc(var(--h) * 1.2);
+
+  div[elemrel], div[nextrel] {
+    background-color: inherit;
+    display: flex;
+    flex-flow: column;
+    height: var(--h1);
+    min-height: var(--h1);
+    max-height: var(--h1);
+    border-radius: 0;
+    padding: 0.5em;
+    gap: 10px;
+    flex-wrap: wrap;
+
+    img[current] {
+      position: absolute;
+      left: initial;
+      right: 10px;
+      top: 10px;
+      width: var(--img-size1);
+      height: var(--img-size1);
+      z-index: 0;
+    }
+
+    div[prop] {
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    div[name] {
+      font-size: 2em;
+      padding: 0;
+    }
+
+    [propName] {
+      font-size: 75%;
+    }
+
+    [propValue] {
+      font-weight: bold;
+    }
+  }
+
+  div[elemrel] {
+    position: relative;
+    animation-duration: var(--ad);
+    animation-timing-function: ease-in-out;
+    animation-direction: normal;
+    animation-fill-mode: forwards;
+  }
+
+  div[nextrel] {
+    position: absolute;
+    left: 2em;
+    top: 2em;
+    width: var(--w);
+    opacity: 0;
+    animation-duration: var(--ad);
+    animation-timing-function: ease-in-out;
+    animation-direction: normal;
+    animation-delay: calc(var(--ad) * 0.9);
+    animation-fill-mode: forwards;
+  }
+
+  div[controls] {
+    display: flex;
+    flex-flow: row;
+    width: 100%;
+
+    button {
+      flex: 1;
+    }
+
+    div[progress] {
+      display: flex;
+      align-content: center;
+      align-items: center;
+      height: 60px;
+      flex: 1;
+      padding-right: 10px;
+    }
+
+    ::ng-deep .mat-progress-bar-buffer {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    ::ng-deep .mat-progress-bar-fill::after {
+      background-color: yellow;
+    }
+  }
+}
+
+div[relatement] {
+  display: flex;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 0.5em;
+  //  padding: 0.5em;
+  //  margin: 0.5em;
+  align-items: center;
+  justify-content: center;
+  width: var(--w);
+
+  ::ng-deep svg {
+    opacity: 0.7;
+  }
+}
+
+div[elemrel] {
+  position: relative;
+  width: var(--w);
+  height: var(--h);
+  min-width: var(--w);
+  min-height: var(--h);
+  max-width: var(--w);
+  max-height: var(--h);
+
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+
+  svg {
+    width: var(--svgSize);
+    opacity: 0.7;
+  }
+
+  img {
+    cursor: pointer;
+    width: var(--img-size);
+    height: var(--img-size);
+  }
+
+  img[destroys] {
+    position: absolute;
+    left: var(--imgDeX);
+    top: var(--imgDeY);
+  }
+
+  svg[destroys] {
+    position: absolute;
+    left: var(--svgDeX);
+    top: var(--svgDeY);
+  }
+
+  img[current] {
+    position: absolute;
+    left: var(--imgX);
+    top: var(--imgY);
+  }
+
+  svg[destroyedby] {
+    position: absolute;
+    left: var(--svgDbX);
+    top: var(--svgDbY);
+  }
+
+  img[destroyedby] {
+    position: absolute;
+    left: var(--imgDbX);
+    top: var(--imgDbY);
+  }
+
+  svg[createdby] {
+    position: absolute;
+    left: var(--svgCbX);
+    top: var(--svgCbY);
+  }
+
+  img[createdby] {
+    position: absolute;
+    left: var(--imgCbX);
+    top: var(--imgCbY);
+  }
+
+  svg[creates] {
+    position: absolute;
+    left: var(--svgCrX);
+    top: var(--svgCrY);
+  }
+
+  img[creates] {
+    position: absolute;
+    left: var(--imgCrX);
+    top: var(--imgCrY);
+  }
+}
+
+div[animals], div[elements] {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+
+  img {
+    width: 40px;
+  }
+
+  img.big {
+    width: 60px;
+  }
+
+  img.small {
+    width: 80px;
+  }
+
+  img.mark {
+    width: 80px;
+  }
+}
+
+::ng-deep span, ::ng-deep img {
+  vertical-align: middle;
+}
+
+div[meaningspanel] {
+  display: flex;
+  flex: 1;
+}
+
+div[meanings] {
+  display: flex;
+  flex: 1;
+  justify-content: flex-start;
+  align-items: flex-start;
+  overflow-y: auto;
+
+  ::ng-deep .miss {
+    opacity: 0.4;
+  }
+
+  table {
+    tr:nth-child(odd) {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    tr[title] {
+      background: black;
+      color: white;
+    }
+
+    td {
+      padding: 0.5em;
+    }
+
+    ::ng-deep div.influence {
+      display: flex;
+      flex-direction: column;
+    }
+
+    td:first-child {
+      width: 30%;
+      text-align: justify;
+    }
+
+    td:nth-child(2) {
+      width: 120px;
+    }
+
+    td:last-child {
+      width: auto;
+      text-align: justify;
+    }
+  }
+
+  ::ng-deep .mark {
+    font-weight: bold;
+  }
+}
+
+div[calendar] {
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow-y: scroll;
+
+  table {
+    td[day] {
+      width: 5%;
+
+      div[day] {
+        display: flex;
+        position: relative;
+
+        img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          opacity: 0.7;
+        }
+
+        div {
+          display: flex;
+          position: relative;
+          z-index: 1;
+          font-weight: bold;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          color: black;
+          text-shadow: 1px 1px white, -1px -1px white;
+        }
+      }
+    }
+
+    td[dow] {
+      width: 15%;
+    }
+
+    td[action] {
+      width: 40%;
+    }
+
+    svg {
+      width: 30px;
+    }
+  }
+}
+
+div[zodiacpanel] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+div[zodiac] {
+  display: flex;
+  flex: 1;
+  width: 559px;
+  position: relative;
+
+  material-button {
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 0;
+    margin: 0;
+
+    ::ng-deep .content {
+      padding: 0;
+    }
+  }
+
+  [small] {
+    position: absolute;
+  }
+
+  [big] {
+    position: absolute;
+    top: 143px;
+    left: 143px;
+  }
+
+  [topleft] {
+    top: 88px;
+    left: 8px;
+    transform: rotate(-51deg);
+  }
+
+  [top] {
+    top: 16px;
+    left: 158px;
+  }
+
+  [topright] {
+    top: 88px;
+    left: 307px;
+    transform: rotate(51deg);
+  }
+
+  [left] {
+    top: 249px;
+    left: -29px;
+    transform: rotate(-102.5deg);
+  }
+
+  [right] {
+    top: 250px;
+    left: 344px;
+    transform: rotate(103deg);
+  }
+
+  [bottomleft] {
+    top: 380px;
+    left: 73px;
+    transform: rotate(-154deg);
+  }
+
+  [bottomright] {
+    top: 380px;
+    left: 240px;
+    transform: rotate(155deg);
+  }
+}
+
+@media(max-width: 1250px), (max-height: 806px) {
+  div[zodiac] {
+    transform: scale(0.5);
+  }
+  div[zodiacpanel] {
+    width: 280px;
+  }
+}

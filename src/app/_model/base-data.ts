@@ -14,6 +14,13 @@ export abstract class BaseData {
     return null;
   }
 
+  static toDate(value: number | string) {
+    if (value == null) {
+      return null;
+    }
+    return new Date(value);
+  }
+
   static toString(json: any, key: string, def = ''): string {
     if (json == null || json[key] == null) {
       return def;

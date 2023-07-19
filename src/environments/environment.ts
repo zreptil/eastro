@@ -1,8 +1,8 @@
 export const environment = {
   isProduction: false,
   // name of settings file in dropbox appdata folder
-  settingsFilename: 'ng-app-settings',
+  settingsFilename: 'eastro-settings',
   // api key for dropbox
-  DROPBOX_APP_KEY: 'ng-app'
+  DROPBOX_APP_KEY: 'eastro'
 };
 

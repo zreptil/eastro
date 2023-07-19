@@ -275,6 +275,8 @@ export class Utils {
   }
 
   static differenceInDays(later: Date, earlier: Date): number {
+    later.setHours(0, 0, 0);
+    earlier.setHours(0, 0, 0);
     const ret = later?.getTime() - earlier?.getTime();
     return Math.floor(ret / 1000 / 60 / 60 / 24);
   }

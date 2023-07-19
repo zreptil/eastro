@@ -1,0 +1,386 @@
+<div [innerHTML]="globals?.svgCollection"></div>
+<div [ngStyle]="globals.styleForElement(currElement, currElement)" [ngSwitch]="elemView">
+  <div *ngSwitchCase="0" elemview panel>
+    <div name>{{globals.nameForElement(currElement)}}</div>
+    <div (click)="toggleElemView()" [innerHtml]="calcElemRel()" relatement></div>
+  </div>
+  <div *ngSwitchCase="1" elemview panel>
+    <div name>{{globals.nameForElement(currElement)}}</div>
+    <div elemrel>
+      <img (click)="toggleElemView()" [src]="imgForElement('curr')" alt="current element" current>
+      <img (click)="activate('createdBy')" [src]="imgForElement('createdBy')" alt="element 1" createdby>
+      <img (click)="activate('creates')" [src]="imgForElement('creates')" alt="element 2" creates>
+      <img (click)="activate('destroyedBy')" [src]="imgForElement('destroyedBy')" alt="element 3" destroyedby>
+      <img (click)="activate('destroys')" [src]="imgForElement('destroys')" alt="element 4" destroys>
+      <svg [ngStyle]="globals.styleForElement('createdBy', currElement)" createdby viewBox="0 0 511 511">
+        <use href="#hand"/>
+      </svg>
+      <svg [ngStyle]="globals.styleForElement('curr', currElement)" creates viewBox="0 0 511 511">
+        <use href="#hand"/>
+      </svg>
+      <svg [ngStyle]="globals.styleForElement('curr', currElement)" destroys viewBox="0 0 512 512">
+        <use href="#fist"/>
+      </svg>
+      <svg [ngStyle]="globals.styleForElement('destroyedBy', currElement)" destroyedby viewBox="0 0 512 512">
+        <use href="#fist"/>
+      </svg>
+    </div>
+  </div>
+  <div *ngSwitchCase="2">
+    <div [style]="viewElemStyle" elemview panel video>
+      <div [style]="nextElemStyle" nextrel>
+        <img [src]="imgForElement('creates')" alt="next element" current>
+        <div name>{{globals.nameForElement(nextElement)}}</div>
+        <div *ngFor="let prop of markProps" prop>
+          <div propName>{{markedProp(nextElement, prop).name}}</div>
+          <div propValue>{{markedProp(nextElement, prop).property}}</div>
+        </div>
+      </div>
+      <div (click)="toggleElemView()" [style]="currElemStyle" elemrel>
+        <img (click)="activateNextElement($event)" [src]="imgForElement('curr')" alt="current element" current>
+        <div name>{{globals.nameForElement(currElement)}}</div>
+        <div *ngFor="let prop of markProps" prop>
+          <div propName>{{markedProp(currElement, prop).name}}</div>
+          <div propValue>{{markedProp(currElement, prop).property}}</div>
+        </div>
+      </div>
+    </div>
+    <div controls>
+      <ng-container *ngIf="_timeoutHandle==null">
+        <button (click)="clickPlay($event)" mat-flat-button>
+          <mat-icon>play_arrow</mat-icon>
+          Abspielen
+        </button>
+        <button (click)="changeDuration($event)" *ngIf="_timeoutHandle==null" mat-flat-button>{{duration}}</button>
+      </ng-container>
+      <ng-container *ngIf="_timeoutHandle!=null">
+        <button (click)="clickStop($event)" mat-flat-button>
+          <mat-icon>stop</mat-icon>
+          Stop
+        </button>
+        <div progress>
+          <mat-progress-bar [value]="progress"></mat-progress-bar>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+<div panel>
+  <div property-panel>
+    <div (click)="activateProp(prop)"
+         *ngFor="let prop of globals.propsForElement(currElement)"
+         [class]="classForProp(prop)"
+         property>
+      <div name>{{prop.name}}</div>
+      <div value>{{prop.property}}</div>
+    </div>
+  </div>
+</div>
+<!--
+<div *ngIf="(event?.isNotEmpty ?? false) && !nopage" meaningspanel>
+  <div *ngIf="currPage=='meanings'" meanings>
+    <table cellpadding="0" cellspacing="0">
+      <tr title>
+        <td i18n="description">Beschreibung</td>
+        <td i18n="icons">Zeichen</td>
+        <td i18n="meaning">Deutung Tiere</td>
+      </tr>
+      <tr>
+        <td i18n="description yearanimal">
+          Das Jahrestier ist die zentrale Tierkarte und vermittelt einen groben Eindruck von der "äusseren" Persönlichkeit des Menschen
+        </td>
+        <td>
+          <img src="packages/eastro/assets/img/animals/big/{{event?.year.animal}}.png" style="width:120px">
+        </td>
+        <td [InnerHtml]="event?.meaningHtml('aPerson', event?.year.animal)">
+        </td>
+      </tr>
+      <tr>
+        <td i18n="description monthanimal">
+          Einfluss des Monatstiers
+        </td>
+        <td>
+          <img src="packages/eastro/assets/img/animals/square/{{event?.month.animal}}.png">
+          <img src="packages/eastro/assets/img/elements/square/{{event?.month.elements}}.png">
+        </td>
+        <td [safeInnerHtml]="event?.meaningHtml('aInfluence', event?.yama)">
+        </td>
+      </tr>
+      <tr>
+        <td i18n="description dayanimal">
+          Einfluss des Tagestiers
+        </td>
+        <td>
+          <img src="packages/eastro/assets/img/animals/square/{{event?.day.animal}}.png">
+          <img src="packages/eastro/assets/img/elements/square/{{event?.day.elements}}.png">
+        </td>
+        <td [safeInnerHtml]="event?.meaningHtml('aInfluence', event?.yada)">
+        </td>
+      </tr>
+      <tr *ngIf="(event?.hour?.animal ?? 0)>0">
+        <td i18n="description houranimal">
+          Einfluss des Stundentiers
+        </td>
+        <td>
+          <img src="packages/eastro/assets/img/animals/square/{{event?.hour.animal}}.png">
+          <img src="packages/eastro/assets/img/elements/square/{{event?.hour.elements}}.png">
+        </td>
+        <td [safeInnerHtml]="event?.meaningHtml('aInfluence', event?.yaha)">
+        </td>
+      </tr>
+      <tr>
+        <td i18n="description good relations">
+          Günstige Beziehungen zu
+        </td>
+        <td colspan="2">
+          <img *ngFor="let key of event?.listGoodRelations" src="packages/eastro/assets/img/animals/square/{{key}}.png">
+        </td>
+      </tr>
+      <tr>
+        <td i18n="description bad relations">
+          Ungünstige Beziehungen zu
+        </td>
+        <td colspan="2">
+          <img *ngFor="let key of event?.listBadRelations" src="packages/eastro/assets/img/animals/square/{{key}}.png">
+        </td>
+      </tr>
+      <tr title>
+        <td i18n="description">Beschreibung</td>
+        <td i18n="icons">Zeichen</td>
+        <td i18n="meaning">Deutung Kombinationen</td>
+      </tr>
+      <tr>
+        <td [safeInnerHtml]="event?.meaningHtml('aTriDesc','creativity')"></td>
+        <td>
+          <img *ngFor="let key of [1,5,9]" [class]="event?.getAnimalClass(key)" src="packages/eastro/assets/img/animals/square/{{key}}.png">
+        </td>
+        <td [safeInnerHtml]="event?.combiMeaningHtml('aTriangle','',[1,5,9])"></td>
+      </tr>
+      <tr>
+        <td [safeInnerHtml]="event?.meaningHtml('aTriDesc','trade')"></td>
+        <td>
+          <img *ngFor="let key of [2,6,10]" [class]="event?.getAnimalClass(key)" src="packages/eastro/assets/img/animals/square/{{key}}.png">
+        </td>
+        <td [safeInnerHtml]="event?.combiMeaningHtml('aTriangle','',[2,6,10])"></td>
+      </tr>
+      <tr>
+        <td [safeInnerHtml]="event?.meaningHtml('aTriDesc','ambition')"></td>
+        <td>
+          <img *ngFor="let key of [3,7,11]" [class]="event?.getAnimalClass(key)" src="packages/eastro/assets/img/animals/square/{{key}}.png">
+        </td>
+        <td [safeInnerHtml]="event?.combiMeaningHtml('aTriangle','',[3,7,11])"></td>
+      </tr>
+      <tr>
+        <td [safeInnerHtml]="event?.meaningHtml('aTriDesc','family')"></td>
+        <td>
+          <img *ngFor="let key of [4,8,12]" [class]="event?.getAnimalClass(key)" src="packages/eastro/assets/img/animals/square/{{key}}.png">
+        </td>
+        <td [safeInnerHtml]="event?.combiMeaningHtml('aTriangle','',[4,8,12])"></td>
+      </tr>
+      <tr>
+        <td [safeInnerHtml]="event?.meaningHtml('aCrossDesc','flowers')"></td>
+        <td>
+          <img *ngFor="let key of [1,4,7,10]" [class]="event?.getAnimalClass(key)" src="packages/eastro/assets/img/animals/square/{{key}}.png">
+        </td>
+        <td *ngIf="event?.countAnimals([1,4,7,10])>1" [safeInnerHtml]="event?.combiMeaningHtml('','aCross',[1,4,7,10])"></td>
+        <td *ngIf="event?.countAnimals([1,4,7,10])<2">
+          Das Kreuz ist nur dann von Bedeutung, wenn zwei oder mehr Tiere vorhanden sind.
+        </td>
+      </tr>
+      <tr>
+        <td [safeInnerHtml]="event?.meaningHtml('aCrossDesc','literature')"></td>
+        <td>
+          <img *ngFor="let key of [2,5,8,11]" [class]="event?.getAnimalClass(key)" src="packages/eastro/assets/img/animals/square/{{key}}.png">
+        </td>
+        <td *ngIf="event?.countAnimals([2,5,8,11])>1" [safeInnerHtml]="event?.combiMeaningHtml('','aCross',[2,5,8,11])"></td>
+        <td *ngIf="event?.countAnimals([2,5,8,11])<2">
+          Das Kreuz ist nur dann von Bedeutung, wenn zwei oder mehr Tiere vorhanden sind.
+        </td>
+      </tr>
+      <tr>
+        <td [safeInnerHtml]="event?.meaningHtml('aCrossDesc','horses')"></td>
+        <td>
+          <img *ngFor="let key of [3,6,9,12]" [class]="event?.getAnimalClass(key)" src="packages/eastro/assets/img/animals/square/{{key}}.png">
+        </td>
+        <td *ngIf="event?.countAnimals([3,6,9,12])>1" [safeInnerHtml]="event?.combiMeaningHtml('','aCross',[3,6,9,12])"></td>
+        <td *ngIf="event?.countAnimals([3,6,9,12])<2">
+          Das Kreuz ist nur dann von Bedeutung, wenn zwei oder mehr Tiere vorhanden sind.
+        </td>
+      </tr>
+      <tr title>
+        <td i18n="description">Beschreibung</td>
+        <td i18n="icons">Zeichen</td>
+        <td i18n="meaning">Deutung Elemente</td>
+      </tr>
+      <tr>
+        <td>Das Jahreselement ist</td>
+        <td>
+          <img src="packages/eastro/assets/img/elements/small/{{event?.year.elements}}.png" style="width:120px">
+        </td>
+        <td>
+          <div [safeInnerHtml]="event?.meaningHtml('eYear',event?.year.elements)"></div>
+          <br>
+          <div [safeInnerHtml]="event?.meaningHtml('eStrengthen',event?.year.elements)"></div>
+        </td>
+      </tr>
+      <tr>
+        <td>Das Schlüsselelement ist</td>
+        <td>
+          <img src="packages/eastro/assets/img/elements/small/{{event?.day.elements}}.png" style="width:120px">
+        </td>
+        <td>
+          <div [safeInnerHtml]="event?.meaningHtml('eKey',event?.day.elements)"></div>
+          <br>
+          <div [safeInnerHtml]="event?.meaningHtml('eStrengthen',event?.day.elements)"></div>
+        </td>
+      </tr>
+      <tr>
+        <td>Einfluss anderer Elemente auf das Schlüsselelement</td>
+        <td>
+          <img src="packages/eastro/assets/img/elements/small/{{event?.day.elements}}.png" style="width:120px">
+        </td>
+        <td>
+          <div class="influence">
+            <div *ngFor="let name of elemInfluenceName; let idx = index">
+              <img src="packages/eastro/assets/img/elements/square/{{elemInfluence[event?.day.elements][idx]}}.png">
+              {{name}}
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr title>
+        <td i18n="description">Beschreibung</td>
+        <td i18n="icons">Zeichen</td>
+        <td i18n="meaning">Deutung Anzahl Elemente</td>
+      </tr>
+      <tr *ngFor="let idx of [0,2,4,6,8]">
+        <td>
+          <img *ngIf="elemCountList(idx).isEmpty" class="miss" src="packages/eastro/assets/img/elements/square/{{idx}}.png">
+          <img *ngFor="let i of elemCountList(idx)" src="packages/eastro/assets/img/elements/square/{{idx}}.png">
+          <img *ngIf="elemCountList(idx+1).isEmpty" class="miss" src="packages/eastro/assets/img/elements/square/{{idx+1}}.png">
+          <img *ngFor="let i of elemCountList(idx+1)" src="packages/eastro/assets/img/elements/square/{{idx+1}}.png">
+        </td>
+        <td>
+          {{event?.elemCount[idx] + event?.elemCount[idx + 1]}}
+        </td>
+        <div [safeInnerHtml]="event?.meaningHtml('eCount',lookup4ElemCount(idx))"></div>
+        <br>
+      </tr>
+    </table>
+  </div>
+  <div *ngIf="currPage=='animal'" animals>
+    <div>
+      <material-button (trigger)="currAnimal=key" *ngFor="let key of animList">
+        <img [class]="animalClass(key)" src="packages/eastro/assets/img/animals/{{animalPath(key)}}/{{key}}.png">
+      </material-button>
+    </div>
+    <div [safeInnerHtml]="event?.meaningHtml('aBase',currAnimal)"></div>
+    <br>
+    <div [safeInnerHtml]="event?.meaningHtml('aPerson',currAnimal)"></div>
+  </div>
+  <div *ngIf="currPage=='elements'" elements>
+    <div>
+      <material-button (trigger)="currElement=key" *ngFor="let key of elemList">
+        <img [class]="elementClass(key)" src="packages/eastro/assets/img/elements/clear/{{key}}.png">
+      </material-button>
+    </div>
+    <div>
+      <div [safeInnerHtml]="calcElemRel()" relatement></div>
+    </div>
+    <div [safeInnerHtml]="event?.meaningHtml('eBase',currElement)"></div>
+    <br>
+    <div elemrel>
+      <img current src="packages/eastro/assets/img/elements/clear/{{currElement}}.png">
+      <img createdby src="packages/eastro/assets/img/elements/clear/{{data['elements'][currElement]['createdBy']}}.png">
+      <img creates src="packages/eastro/assets/img/elements/clear/{{data['elements'][currElement]['creates']}}.png">
+      <img destroyedby src="packages/eastro/assets/img/elements/clear/{{data['elements'][currElement]['destroyedBy']}}.png">
+      <img destroys src="packages/eastro/assets/img/elements/clear/{{data['elements'][currElement]['destroys']}}.png">
+      <svg createdby viewBox="0 0 511 511">
+        <use href="#hand"/>
+      </svg>
+      <svg creates viewBox="0 0 511 511">
+        <use href="#hand"/>
+      </svg>
+      <svg destroys viewBox="0 0 512 512">
+        <use href="#fist"/>
+      </svg>
+      <svg destroyedby viewBox="0 0 512 512">
+        <use href="#fist"/>
+      </svg>
+    </div>
+  </div>
+  <div *ngIf="currPage=='calendar'" calendar>
+    <table cellpadding="0" cellspacing="0">
+      <tr>
+        <td colspan="2">
+          {{currDateString}}
+        </td>
+        <td action>
+          <svg viewBox="0 0 511 511">
+            <use href="#like"/>
+          </svg>
+        </td>
+        <td action>
+          <svg viewBox="0 0 511 511">
+            <use href="#dislike"/>
+          </svg>
+        </td>
+      </tr>
+      <tr *ngFor="let date of dateList">
+        <td day>
+          <div day>
+            <img src="packages/eastro/assets/img/animals/square/{{event?.calcDayAnimal(date['date'])['animal']}}.png">
+            <div>{{date['day']}}</div>
+          </div>
+        </td>
+        <td dow>{{date['dow']}}</td>
+        <td [safeInnerHtml]="date['pro']" action></td>
+        <td [safeInnerHtml]="date['contra']" action></td>
+      </tr>
+
+    </table>
+  </div>
+</div>
+<div *ngIf="event?.isNotEmpty" zodiacpanel>
+  <div *ngIf="data!=null" title>
+    <material-button (trigger)="currPage='meanings'">
+      {{event?.name ?? ''}}
+      <svg [style]="globals.genderStyle(event?.gender)" class="gender" viewBox="0 0 400 400">
+        <use href="#yinyang"/>
+      </svg>
+    </material-button>
+  </div>
+  <div *ngIf="data==null" i18n="still reading basedata">Ich lade noch die Basisdaten ...</div>
+  <div *ngIf="data!=null" elements>
+    <material-button (trigger)="fire('hourElement')" right small>
+      <img onError="this.src=''" src="packages/eastro/assets/img/elements/small/{{event?.hour.elements}}.png">
+    </material-button>
+    <material-button (trigger)="fire('hourAnimal')" small topright>
+      <img onError="this.src=''" src="packages/eastro/assets/img/animals/small/{{event?.hour.animal}}.png">
+    </material-button>
+    <material-button (trigger)="fire('dayElement')" small top>
+      <img onError="this.src=''" src="packages/eastro/assets/img/elements/small/{{event?.day.elements}}.png">
+    </material-button>
+    <material-button (trigger)="fire('dayAnimal')" small topleft>
+      <img onError="this.src=''" src="packages/eastro/assets/img/animals/small/{{event?.day.animal}}.png">
+    </material-button>
+    <material-button (trigger)="fire('monthElement')" left small>
+      <img onError="this.src=''" src="packages/eastro/assets/img/elements/small/{{event?.month.elements}}.png">
+    </material-button>
+    <material-button (trigger)="fire('monthAnimal')" bottomleft small>
+      <img onError="this.src=''" src="packages/eastro/assets/img/animals/small/{{event?.month.animal}}.png">
+    </material-button>
+    <material-button (trigger)="fire('yearElement')" bottomright small>
+      <img onError="this.src=''" src="packages/eastro/assets/img/elements/small/{{event?.year.elements}}.png">
+    </material-button>
+    <material-button (trigger)="fire('yearAnimal')" big>
+      <img onError="this.src=''" src="packages/eastro/assets/img/animals/big/{{event?.year.animal}}.png">
+    </material-button>
+  </div>
+  <div *ngIf="data!=null" title>
+    <material-button (trigger)="fire('calendar')">
+      {{event?.timeDisplay ?? ''}}
+    </material-button>
+  </div>
+</div>
+-->

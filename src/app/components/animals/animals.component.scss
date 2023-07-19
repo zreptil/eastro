@@ -1,0 +1,85 @@
+:host {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  height: initial;
+
+  ::-webkit-scrollbar {
+    width: auto;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: var(--secondaryBack);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--primaryBack);
+  }
+}
+
+div[panel] {
+  margin: 0.2em;
+}
+
+div[animallist] {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  max-width: 30em;
+  gap: 0.3em;
+
+  div[property] {
+    min-width: 6em;
+  }
+
+  .e1 {
+    background-color: var(--elem-1-back);
+
+    div[name] {
+      color: var(--elem-1-fore);
+    }
+  }
+
+  .e2 {
+    background-color: var(--elem-2-back);
+
+    div[name] {
+      color: var(--elem-2-fore);
+    }
+  }
+
+  .e3 {
+    background-color: var(--elem-3-back);
+
+    div[name] {
+      color: var(--elem-3-fore);
+    }
+  }
+
+  .e4 {
+    background-color: var(--elem-4-back);
+
+    div[name] {
+      color: var(--elem-4-fore);
+    }
+  }
+
+  .e5 {
+    background-color: var(--elem-5-back);
+
+    div[name] {
+      color: var(--elem-5-fore);
+    }
+  }
+}
+
+div[details] {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  gap: 0.3em;
+}
+
+.demo-inline-calendar-card {
+  width: 300px;
+}

@@ -2,16 +2,16 @@
   "display": "standalone",
   "icons": [
     {
-      "sizes": "176x176",
+      "sizes": "128x128",
       "src": "themes/standard/favicon.png",
       "type": "image/png"
     }
   ],
-  "name": "ng-app",
+  "name": "eastro",
   "permissions": [],
   "prefer_related_applications": true,
   "related_applications": [],
-  "short_name": "ng-app",
+  "short_name": "eastro",
   "start_url": "/index.html",
-  "url": "https://ng-app.zreptil.de/"
+  "url": "https://eastro.zreptil.de/"
 }
