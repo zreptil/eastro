@@ -42,8 +42,13 @@
       height: 100%;
     }
 
-    mat-icon {
+    mat-icon, button {
       color: var(--toolbarFore);
+    }
+
+    button.current {
+      background-color: var(--mainBack);
+      border-radius: 0;
     }
 
     mat-icon#link-delete {

@@ -63,13 +63,13 @@ export class GlobalsService {
     GLOBALS = this;
     this.loadWebData();
     this.loadSharedData().then(_ => {
-      if (Utils.isEmpty(this.storageVersion)) {
-        this.currentPage = 'welcome';
-      } else if (this.storageVersion !== this.version) {
-        this.currentPage = 'news';
-      } else {
-        this.currentPage = 'main';
-      }
+      // if (Utils.isEmpty(this.storageVersion)) {
+      //   this.currentPage = 'welcome';
+      // } else if (this.storageVersion !== this.version) {
+      //   this.currentPage = 'news';
+      // } else {
+      //   this.currentPage = 'elements';
+      // }
     });
   }
 
@@ -141,6 +141,7 @@ export class GlobalsService {
     }
 
     this.storageVersion = storage.s1;
+    this.currentPage = storage.s2 ?? 'elements';
     // validate values
     if (this.svgCollection == null) {
       this.svgCollection = {};
@@ -171,6 +172,7 @@ export class GlobalsService {
     const storage: any = {
       s0: Date.now(),
       s1: this.version,
+      s2: this.currentPage
     };
     const data = JSON.stringify(storage);
     localStorage.setItem('sharedData', data);

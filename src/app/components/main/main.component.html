@@ -9,23 +9,30 @@
         <mat-icon *ngIf="!globals.isDebug">bug_report</mat-icon>
         <mat-icon *ngIf="globals.isDebug">pest_control</mat-icon>
       </button>
-      <button (click)="sync.toggleSyncDropbox()" id="sync" mat-icon-button>
-        <ng-container *ngIf="!sync.hasSync">
-          <mat-icon>sync_disabled</mat-icon>
-        </ng-container>
-        <ng-container *ngIf="sync.hasSync">
-          <img alt="dropbox" src="assets/images/dropbox.png">
-        </ng-container>
+      <button (click)="setCurrentPage(btn.page)"
+              *ngFor="let btn of toolbarButtons"
+              [class]="classForToolbarbutton(btn)" mat-flat-button>
+        {{btn.label}}
       </button>
-      <button (click)="globals.currentPage='news'" id="news" mat-icon-button>
-        <mat-icon>info_outline</mat-icon>
-      </button>
-      <button (click)="globals.currentPage='impressum'" id="impressum" mat-icon-button>
-        <mat-icon>account_balance</mat-icon>
-      </button>
-      <button (click)="globals.currentPage='welcome'" id="welcome" mat-icon-button>
-        <mat-icon>school</mat-icon>
-      </button>
+      <!--
+            <button (click)="sync.toggleSyncDropbox()" id="sync" mat-icon-button>
+              <ng-container *ngIf="!sync.hasSync">
+                <mat-icon>sync_disabled</mat-icon>
+              </ng-container>
+              <ng-container *ngIf="sync.hasSync">
+                <img alt="dropbox" src="assets/images/dropbox.png">
+              </ng-container>
+            </button>
+            <button (click)="globals.currentPage='news'" id="news" mat-icon-button>
+              <mat-icon>info_outline</mat-icon>
+            </button>
+            <button (click)="globals.currentPage='impressum'" id="impressum" mat-icon-button>
+              <mat-icon>account_balance</mat-icon>
+            </button>
+            <button (click)="globals.currentPage='welcome'" id="welcome" mat-icon-button>
+              <mat-icon>school</mat-icon>
+            </button>
+      -->
     </div>
   </div>
   <div contentpanel>
@@ -33,8 +40,10 @@
     </div>
     <div contentback>
       <div content>
-        <app-animals *ngIf="false" [event]="globals?.zodiacEvent"></app-animals>
-        <app-elements *ngIf="true" [event]="globals?.zodiacEvent"></app-elements>
+        <ng-container [ngSwitch]="globals.currentPage">
+          <app-animals *ngSwitchCase="'animals'" [event]="globals?.zodiacEvent"></app-animals>
+          <app-elements *ngSwitchCase="'elements'" [event]="globals?.zodiacEvent"></app-elements>
+        </ng-container>
       </div>
     </div>
   </div>

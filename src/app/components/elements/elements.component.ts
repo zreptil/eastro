@@ -59,7 +59,7 @@ export class ElementsComponent {
 
   load(): void {
     try {
-      const data = JSON.parse(localStorage.getItem('elements'));
+      const data = JSON.parse(localStorage.getItem('elemProps'));
       this.markProps = data.m;
     } catch (ex) {
     }
@@ -69,7 +69,7 @@ export class ElementsComponent {
     const data = {
       m: this.markProps
     };
-    localStorage.setItem('elements', JSON.stringify(data));
+    localStorage.setItem('elemProps', JSON.stringify(data));
   }
 
   getElement(element: string, idx: string): string {
@@ -161,7 +161,7 @@ export class ElementsComponent {
   imgForElement(idx: string): string {
     let key = this.currElement;
     if (idx !== 'curr') {
-      key = GLOBALS.zodiacData?.elements?.[this.currElement]?.[idx];
+      key = GLOBALS.zodiacData?.elements?.[this.currElement]?.[idx] ?? this.currElement;
     }
     return `assets/images/elements/clear/${key}.png`;
   }

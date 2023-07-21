@@ -8,6 +8,11 @@ import {SyncService} from '@/_services/sync/sync.service';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent {
+  toolbarButtons = [
+    {label: 'Elemente', page: 'elements'},
+    {label: 'Tiere', page: 'animals'}
+  ];
+
   constructor(public globals: GlobalsService,
               public sync: SyncService) {
   }
@@ -16,6 +21,19 @@ export class MainComponent {
     const ret = ['mat-elevation-z4'];
     if (GLOBALS.isDebug) {
       ret.push('debug');
+    }
+    return ret;
+  }
+
+  setCurrentPage(page: string): void {
+    GLOBALS.currentPage = page;
+    GLOBALS.saveSharedData();
+  }
+
+  classForToolbarbutton(btn: any): string[] {
+    const ret = [];
+    if (GLOBALS.currentPage === btn.page) {
+      ret.push('current');
     }
     return ret;
   }
