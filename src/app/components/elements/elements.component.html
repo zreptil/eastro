@@ -27,41 +27,44 @@
     </div>
   </div>
   <div *ngSwitchCase="2">
-    <div [style]="viewElemStyle" elemview panel video>
-      <div [style]="nextElemStyle" nextrel>
-        <img [src]="imgForElement('creates')" alt="next element" current>
-        <div name>{{globals.nameForElement(nextElement)}}</div>
-        <div *ngFor="let prop of markProps" prop>
-          <div propName>{{markedProp(nextElement, prop).name}}</div>
-          <div propValue>{{markedProp(nextElement, prop).property}}</div>
+    <div videoframe>
+      <div [style]="viewElemStyle" elemview panel video>
+        <div [style]="nextElemStyle" nextrel>
+          <img [src]="imgForElement('creates')" alt="next element" current>
+          <div name>{{globals.nameForElement(nextElement)}}</div>
+          <div *ngFor="let prop of markProps" prop>
+            <div propName>{{markedProp(nextElement, prop).name}}</div>
+            <div propValue>{{markedProp(nextElement, prop).property}}</div>
+          </div>
+        </div>
+        <div (click)="toggleElemView()" [style]="currElemStyle" elemrelvideo>
+          <img (click)="activateNextElement($event)" [src]="imgForElement('curr')" alt="current element" current>
+          <div timeout>{{timeLeft}}</div>
+          <div name>{{globals.nameForElement(currElement)}}</div>
+          <div *ngFor="let prop of markProps" prop>
+            <div propName>{{markedProp(currElement, prop).name}}</div>
+            <div propValue>{{markedProp(currElement, prop).property}}</div>
+          </div>
         </div>
       </div>
-      <div (click)="toggleElemView()" [style]="currElemStyle" elemrel>
-        <img (click)="activateNextElement($event)" [src]="imgForElement('curr')" alt="current element" current>
-        <div name>{{globals.nameForElement(currElement)}}</div>
-        <div *ngFor="let prop of markProps" prop>
-          <div propName>{{markedProp(currElement, prop).name}}</div>
-          <div propValue>{{markedProp(currElement, prop).property}}</div>
-        </div>
+      <div controls>
+        <ng-container *ngIf="_timeoutHandle==null">
+          <button (click)="clickPlay($event)" mat-flat-button>
+            <mat-icon>play_arrow</mat-icon>
+            Abspielen
+          </button>
+          <button (click)="changeDuration($event)" *ngIf="_timeoutHandle==null" mat-flat-button>{{duration}}</button>
+        </ng-container>
+        <ng-container *ngIf="_timeoutHandle!=null">
+          <button (click)="clickStop($event)" mat-flat-button>
+            <mat-icon>stop</mat-icon>
+            Stop
+          </button>
+          <div progress>
+            <mat-progress-bar [value]="progress"></mat-progress-bar>
+          </div>
+        </ng-container>
       </div>
-    </div>
-    <div controls>
-      <ng-container *ngIf="_timeoutHandle==null">
-        <button (click)="clickPlay($event)" mat-flat-button>
-          <mat-icon>play_arrow</mat-icon>
-          Abspielen
-        </button>
-        <button (click)="changeDuration($event)" *ngIf="_timeoutHandle==null" mat-flat-button>{{duration}}</button>
-      </ng-container>
-      <ng-container *ngIf="_timeoutHandle!=null">
-        <button (click)="clickStop($event)" mat-flat-button>
-          <mat-icon>stop</mat-icon>
-          Stop
-        </button>
-        <div progress>
-          <mat-progress-bar [value]="progress"></mat-progress-bar>
-        </div>
-      </ng-container>
     </div>
   </div>
 </div>

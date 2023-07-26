@@ -27,11 +27,17 @@ export class ElementsComponent {
     this.load();
   }
 
+  _timeLeft: string;
+
+  get timeLeft(): string {
+    return this._timeLeft;
+  }
+
   get nextElement(): string {
     return this.getElement(this.currElement, 'creates');
   }
 
-  _duration = 5000;
+  _duration = 10000;
 
   get duration(): string {
     if (this._duration % 60000 === 0) {
@@ -83,7 +89,7 @@ export class ElementsComponent {
       const duration = 3;
       this.currElemStyle = 'animation-name:fadeOut';
       this.nextElemStyle = 'animation-name:fadeIn';
-      this.viewElemStyle = `--ad:${duration / 2}s;animation:furz ${duration}s ease-in-out normal;--bf:var(--elem-${this.currElement}-back);--bt:var(--elem-${nextElement}-back);--ff:var(--elem-${this.currElement}-fore);--ft:var(--elem-${nextElement}-fore)`;
+      this.viewElemStyle = `--ad:${duration / 2}s;animation:fadeColor ${duration}s ease-in-out normal;--bf:var(--elem-${this.currElement}-back);--bt:var(--elem-${nextElement}-back);--ff:var(--elem-${this.currElement}-fore);--ft:var(--elem-${nextElement}-fore)`;
       setTimeout(() => {
         this.currElement = nextElement;
         this.viewElemStyle = '';
@@ -210,7 +216,7 @@ export class ElementsComponent {
 
   changeDuration(evt: MouseEvent) {
     evt?.stopPropagation();
-    const list = [5, 60, 90, 120, 300];
+    const list = [10, 60, 90, 120, 300];
     const idx = list.findIndex(l => l === this._duration / 1000);
     if (idx < 0) {
       this._duration = list[0] * 1000;
@@ -224,19 +230,25 @@ export class ElementsComponent {
     if (evt != null) {
       this._nextChange = new Date().getTime() + this._duration;
       this.progress = 0;
+      this._timeLeft = '';
     }
-    const timeout = 900;
-    this._timeoutHandle = setTimeout(() => {
-      const now = new Date().getTime();
-      this.progress = (1 - (this._nextChange - now - timeout) / this._duration) * 100;
-      if (now >= this._nextChange) {
-        this.activateNextElement(null);
-        this._nextChange = new Date().getTime() + this._duration;
-        this.progress = 0;
-      }
-      this.clickPlay(null);
-    }, 900);
+    this._timeoutHandle = setTimeout(() => this.doStep(), 900);
+  }
 
+  doStep() {
+    const timeout = 900;
+    const now = new Date().getTime();
+    this.progress = (1 - (this._nextChange - now - timeout) / this._duration) * 100;
+    const left = Math.floor(Math.max(0, (this._nextChange - now) / 1000));
+    const m = Math.floor(left / 60);
+    const s = `${left % 60}`.padStart(2, '0');
+    this._timeLeft = `${m}:${s}`;
+    if (now >= this._nextChange) {
+      this.activateNextElement(null);
+      this._nextChange = new Date().getTime() + this._duration;
+      this.progress = 0;
+    }
+    this.clickPlay(null);
   }
 
   clickStop(evt: MouseEvent) {

@@ -103,100 +103,117 @@ div[elemview] {
   }
 }
 
-div[elemview][video] {
-  position: relative;
-  padding: 2em;
-  border-radius: 0;
-  --img-size: 80px;
-  --img-size1: 150px;
-  --h1: calc(var(--h) * 1.2);
+div[videoframe] {
+  --width: 530px;
+  --height: calc(var(--width) * 704 / 1061);
+  width: var(--width);
+  height: var(--height);
 
-  div[elemrel], div[nextrel] {
-    background-color: inherit;
-    display: flex;
-    flex-flow: column;
-    height: var(--h1);
-    min-height: var(--h1);
-    max-height: var(--h1);
-    border-radius: 0;
-    padding: 0.5em;
-    gap: 10px;
-    flex-wrap: wrap;
-
-    img[current] {
-      position: absolute;
-      left: initial;
-      right: 10px;
-      top: 10px;
-      width: var(--img-size1);
-      height: var(--img-size1);
-      z-index: 0;
-    }
-
-    div[prop] {
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    div[name] {
-      font-size: 2em;
-      padding: 0;
-    }
-
-    [propName] {
-      font-size: 75%;
-    }
-
-    [propValue] {
-      font-weight: bold;
-    }
+  div[panel] {
+    margin: 0;
   }
 
-  div[elemrel] {
+  div[video] {
+    height: 100%;
     position: relative;
-    animation-duration: var(--ad);
-    animation-timing-function: ease-in-out;
-    animation-direction: normal;
-    animation-fill-mode: forwards;
-  }
+    border-radius: 0;
+    --img-size: 80px;
+    --img-size1: 150px;
+    --h1: calc(var(--h) * 1.2);
 
-  div[nextrel] {
-    position: absolute;
-    left: 2em;
-    top: 2em;
-    width: var(--w);
-    opacity: 0;
-    animation-duration: var(--ad);
-    animation-timing-function: ease-in-out;
-    animation-direction: normal;
-    animation-delay: calc(var(--ad) * 0.9);
-    animation-fill-mode: forwards;
-  }
-
-  div[controls] {
-    display: flex;
-    flex-flow: row;
-    width: 100%;
-
-    button {
-      flex: 1;
-    }
-
-    div[progress] {
+    div[elemrelvideo], div[nextrel] {
+      position: relative;
+      --frame: 20px;
+      top: var(--frame);
+      width: calc(var(--width) - 2 * var(--frame));
+      height: calc(var(--height) - 2 * var(--frame));
       display: flex;
-      align-content: center;
-      align-items: center;
-      height: 60px;
-      flex: 1;
-      padding-right: 10px;
+      flex-flow: column;
+      border-radius: 0;
+      gap: 10px;
+      flex-wrap: wrap;
+
+      img[current] {
+        position: absolute;
+        left: initial;
+        right: 0;
+        top: 0;
+        width: var(--img-size1);
+        height: var(--img-size1);
+        z-index: 0;
+      }
+
+      div[timeout] {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        font-size: 75%;
+        justify-content: flex-start;
+        height: 1em;
+      }
+
+      div[prop] {
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      div[name] {
+        font-size: 2em;
+        padding: 0;
+      }
+
+      [propName] {
+        font-size: 75%;
+      }
+
+      [propValue] {
+        font-weight: bold;
+      }
     }
 
-    ::ng-deep .mat-progress-bar-buffer {
-      background-color: rgba(0, 0, 0, 0.5);
+    div[elemrelvideo] {
+      position: relative;
+      animation-duration: var(--ad);
+      animation-timing-function: ease-in-out;
+      animation-direction: normal;
+      animation-fill-mode: forwards;
     }
 
-    ::ng-deep .mat-progress-bar-fill::after {
-      background-color: yellow;
+    div[nextrel] {
+      position: absolute;
+      opacity: 0;
+      animation-duration: var(--ad);
+      animation-timing-function: ease-in-out;
+      animation-direction: normal;
+      animation-delay: calc(var(--ad) * 0.9);
+      animation-fill-mode: forwards;
+    }
+
+    div[controls] {
+      display: flex;
+      flex-flow: row;
+      width: 100%;
+
+      button {
+        flex: 1;
+      }
+
+      div[progress] {
+        display: flex;
+        align-content: center;
+        align-items: center;
+        height: 60px;
+        flex: 1;
+        padding-right: 10px;
+      }
+
+      ::ng-deep .mat-progress-bar-buffer {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      ::ng-deep .mat-progress-bar-fill::after {
+        background-color: yellow;
+      }
     }
   }
 }
