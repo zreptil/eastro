@@ -52,6 +52,14 @@ export class GlobalsService {
     weiss: {fill: 'var(--elem-4-back)', text: 'var(--elem-4-fore)'},
     blau: {fill: 'var(--elem-5-back)', text: 'var(--elem-5-fore)'}
   };
+  _timeoutHandle: number;
+  _nextChange: number;
+  progress: number;
+  elemView: number = 2;
+  currElemStyle: string;
+  nextElemStyle: string;
+  viewElemStyle: string;
+  currElement = '4';
   private flags = '';
 
   constructor(public http: HttpClient,
@@ -114,6 +122,126 @@ export class GlobalsService {
 
   get appTitle(): string {
     return document.querySelector('head>title').innerHTML;
+  }
+
+  _duration = 10000;
+
+  get duration(): string {
+    if (this._duration % 60000 === 0) {
+      return Utils.plural(this._duration / 60000, {
+        1: `1 Minute`,
+        other: `${this._duration / 60000} Minuten`
+      });
+    }
+    return `${this._duration / 1000} Sekunden`;
+  }
+
+  _timeLeft: string;
+
+  get timeLeft(): string {
+    return this._timeLeft;
+  }
+
+  get nextElement(): string {
+    return this.getElement(this.currElement, 'creates');
+  }
+
+  clickPlay(evt: MouseEvent) {
+    evt?.stopPropagation();
+    if (evt != null) {
+      this._nextChange = new Date().getTime() + GLOBALS._duration;
+      this.progress = 0;
+      this._timeLeft = '';
+    }
+    this._timeoutHandle = setTimeout(() => this.doStep(), 900);
+  }
+
+  doStep() {
+    const timeout = 900;
+    const now = new Date().getTime();
+    this.progress = (1 - (this._nextChange - now - timeout) / GLOBALS._duration) * 100;
+    const left = Math.floor(Math.max(0, (this._nextChange - now) / 1000));
+    const m = Math.floor(left / 60);
+    const s = `${left % 60}`.padStart(2, '0');
+    this._timeLeft = `${m}:${s}`;
+    if (now >= this._nextChange) {
+      this.activateNextElement(null);
+      this._nextChange = new Date().getTime() + GLOBALS._duration;
+      this.progress = 0;
+    }
+    this.clickPlay(null);
+  }
+
+  activateNextElement(evt: MouseEvent) {
+    evt?.stopPropagation();
+    this.activate('creates');
+  }
+
+  toggleElemView() {
+    let view = this.elemView + 1;
+    if (view > 2) {
+      view = 0;
+    }
+    this.elemView = view;
+  }
+
+  activate(idx: string) {
+    const nextElement = this.getElement(this.currElement, idx);
+    if (this.elemView === 2) {
+      const duration = 3;
+      this.currElemStyle = `fadeOut ${duration}s ease-in-out normal`;
+      this.nextElemStyle = `fadeIn ${duration}s ease-in-out normal`;
+      this.viewElemStyle = `--ad:${duration / 2}s;animation:fadeColor ${duration}s ease-in-out normal;--bf:var(--elem-${this.currElement}-back);--bt:var(--elem-${nextElement}-back);--ff:var(--elem-${this.currElement}-fore);--ft:var(--elem-${nextElement}-fore)`;
+      setTimeout(() => {
+        this.currElement = nextElement;
+        this.viewElemStyle = '';
+        this.currElemStyle = '';
+        this.nextElemStyle = '';
+      }, duration * 990);
+    } else {
+      this.currElement = nextElement;
+    }
+  }
+
+  clickStop(evt: MouseEvent) {
+    evt?.stopPropagation();
+    clearTimeout(this._timeoutHandle);
+    this._timeoutHandle = null;
+  }
+
+  changeDuration(evt: MouseEvent) {
+    evt?.stopPropagation();
+    const list = [10, 60, 90, 120, 300];
+    const idx = list.findIndex(l => l === GLOBALS._duration / 1000);
+    if (idx < 0) {
+      GLOBALS._duration = list[0] * 1000;
+    } else {
+      GLOBALS._duration = list[idx >= list.length - 1 ? 0 : idx + 1] * 1000;
+    }
+  }
+
+  getElement(element: string, idx: string): string {
+    const elem = GLOBALS.zodiacData?.elements?.[element];
+    return elem?.[idx] ?? element;
+  }
+
+  markedProp(element: string, value: string) {
+    const ret = GLOBALS.propsForElement(element)?.find(p => p.name === value);
+    if (ret != null) {
+      const parts = ret.property.split(',');
+      if (parts.length > 1) {
+        return {name: ret.name, property: parts[0]};
+      }
+    }
+    return ret ?? {};
+  }
+
+  imgForElement(baseElement: string, idx: string): string {
+    let key = baseElement;
+    if (idx !== 'curr') {
+      key = GLOBALS.zodiacData?.elements?.[baseElement]?.[idx] ?? baseElement;
+    }
+    return `assets/images/elements/clear/${key}.png`;
   }
 
   public propsForElement(id: string | number): any[] {
@@ -302,16 +430,19 @@ export class GlobalsService {
     return ret <= 0 ? 12 + ret : ret;
   }
 
-  styleForElement(idx: string, def: string): any {
+  styleForElement(idx: string, def: string, anim?: string): any {
     const elem = GLOBALS.zodiacData?.elements?.[def];
     let key = elem?.[idx] ?? def;
     const prop = GLOBALS.propsForElement(key)?.find((p: any) => p.name === 'Farbe');
     const color = this.colors[prop?.['property']] ?? {fill: 'initial', text: 'black'};
     const ret: any = {'--hand-fill': color.fill, '--fist-fill': color.fill, '--text': color.text};
+    if (!Utils.isEmpty(anim)) {
+      ret['animation'] = anim;
+    }
     return ret;
   }
 
-  elementForAnimal(animal: any): string {
+  elementForAnimal(_animal: any): string {
     return '';
   }
 

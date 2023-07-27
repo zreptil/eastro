@@ -12,41 +12,11 @@ import {Utils} from '@/classes/utils';
 export class ElementsComponent {
 
   currAnimal = '';
-  currElement = '3';
   markProps: string[] = [];
   currDate = Date.now();
-  elemView: number = 2;
-  _timeoutHandle: number;
-  _nextChange: number;
-  progress: number;
-  currElemStyle: string;
-  nextElemStyle: string;
-  viewElemStyle: string;
 
   constructor() {
     this.load();
-  }
-
-  _timeLeft: string;
-
-  get timeLeft(): string {
-    return this._timeLeft;
-  }
-
-  get nextElement(): string {
-    return this.getElement(this.currElement, 'creates');
-  }
-
-  _duration = 10000;
-
-  get duration(): string {
-    if (this._duration % 60000 === 0) {
-      return Utils.plural(this._duration / 60000, {
-        1: `1 Minute`,
-        other: `${this._duration / 60000} Minuten`
-      });
-    }
-    return `${this._duration / 1000} Sekunden`;
   }
 
   private _event: EventData;
@@ -76,29 +46,6 @@ export class ElementsComponent {
       m: this.markProps
     };
     localStorage.setItem('elemProps', JSON.stringify(data));
-  }
-
-  getElement(element: string, idx: string): string {
-    const elem = GLOBALS.zodiacData?.elements?.[element];
-    return elem?.[idx] ?? element;
-  }
-
-  activate(idx: string) {
-    const nextElement = this.getElement(this.currElement, idx);
-    if (this.elemView === 2) {
-      const duration = 3;
-      this.currElemStyle = 'animation-name:fadeOut';
-      this.nextElemStyle = 'animation-name:fadeIn';
-      this.viewElemStyle = `--ad:${duration / 2}s;animation:fadeColor ${duration}s ease-in-out normal;--bf:var(--elem-${this.currElement}-back);--bt:var(--elem-${nextElement}-back);--ff:var(--elem-${this.currElement}-fore);--ft:var(--elem-${nextElement}-fore)`;
-      setTimeout(() => {
-        this.currElement = nextElement;
-        this.viewElemStyle = '';
-        this.currElemStyle = '';
-        this.nextElemStyle = '';
-      }, duration * 990);
-    } else {
-      this.currElement = nextElement;
-    }
   }
 
   getElemRel(elem: number, x: number, y: number, deg: number,
@@ -143,7 +90,7 @@ export class ElementsComponent {
       `<div style="position:relative;`,
       `width:${radius * 3}px;height:${radius * 5}px;">`
     ];
-    let idx = +this.currElement;
+    let idx = +GLOBALS.currElement;
     for (let i = 0; i < 5; i++) {
       const deg = Math.floor(360 / 5) * i;
       const x = (radius * 1.5) + Math.sin(deg / 180 * Math.PI) * radius;
@@ -151,7 +98,7 @@ export class ElementsComponent {
       ret.push(this.getElemRel(idx, +x, +y, -deg, {creating: true}));
       idx = GLOBALS.zodiacData['elements'][idx]['creates'];
     }
-    idx = +this.currElement;
+    idx = +GLOBALS.currElement;
     for (let i = 0; i < 5; i++) {
       const deg = Math.floor(360 / 5) * i;
       const x = (radius * 1.5) + Math.sin(deg / 180 * Math.PI) * radius;
@@ -165,11 +112,7 @@ export class ElementsComponent {
   }
 
   imgForElement(idx: string): string {
-    let key = this.currElement;
-    if (idx !== 'curr') {
-      key = GLOBALS.zodiacData?.elements?.[this.currElement]?.[idx] ?? this.currElement;
-    }
-    return `assets/images/elements/clear/${key}.png`;
+    return GLOBALS.imgForElement(GLOBALS.currElement, idx);
   }
 
   activateProp(prop: any) {
@@ -188,72 +131,5 @@ export class ElementsComponent {
       ret.push('current');
     }
     return ret;
-  }
-
-  toggleElemView() {
-    let view = this.elemView + 1;
-    if (view > 2) {
-      view = 0;
-    }
-    this.elemView = view;
-  }
-
-  markedProp(element: string, value: string) {
-    const ret = GLOBALS.propsForElement(element)?.find(p => p.name === value);
-    if (ret != null) {
-      const parts = ret.property.split(',');
-      if (parts.length > 1) {
-        return {name: ret.name, property: parts[0]};
-      }
-    }
-    return ret ?? {};
-  }
-
-  activateNextElement(evt: MouseEvent) {
-    evt?.stopPropagation();
-    this.activate('creates');
-  }
-
-  changeDuration(evt: MouseEvent) {
-    evt?.stopPropagation();
-    const list = [10, 60, 90, 120, 300];
-    const idx = list.findIndex(l => l === this._duration / 1000);
-    if (idx < 0) {
-      this._duration = list[0] * 1000;
-    } else {
-      this._duration = list[idx >= list.length - 1 ? 0 : idx + 1] * 1000;
-    }
-  }
-
-  clickPlay(evt: MouseEvent) {
-    evt?.stopPropagation();
-    if (evt != null) {
-      this._nextChange = new Date().getTime() + this._duration;
-      this.progress = 0;
-      this._timeLeft = '';
-    }
-    this._timeoutHandle = setTimeout(() => this.doStep(), 900);
-  }
-
-  doStep() {
-    const timeout = 900;
-    const now = new Date().getTime();
-    this.progress = (1 - (this._nextChange - now - timeout) / this._duration) * 100;
-    const left = Math.floor(Math.max(0, (this._nextChange - now) / 1000));
-    const m = Math.floor(left / 60);
-    const s = `${left % 60}`.padStart(2, '0');
-    this._timeLeft = `${m}:${s}`;
-    if (now >= this._nextChange) {
-      this.activateNextElement(null);
-      this._nextChange = new Date().getTime() + this._duration;
-      this.progress = 0;
-    }
-    this.clickPlay(null);
-  }
-
-  clickStop(evt: MouseEvent) {
-    evt?.stopPropagation();
-    clearTimeout(this._timeoutHandle);
-    this._timeoutHandle = null;
   }
 }

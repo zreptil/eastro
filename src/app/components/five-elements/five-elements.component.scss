@@ -1,0 +1,79 @@
+[root] {
+  display: flex;
+  flex-flow: column;
+  background-color: var(--hand-fill);
+  color: var(--text);
+  width: 100vw;
+  height: 100vh;
+
+  [controls] {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: center;
+
+    div[progress] {
+      display: flex;
+      align-content: center;
+      align-items: center;
+      height: 60px;
+      flex: 1;
+      padding-right: 10px;
+    }
+
+    ::ng-deep .mat-progress-bar-buffer {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    ::ng-deep .mat-progress-bar-fill::after {
+      background-color: yellow;
+    }
+  }
+
+  [elements] {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+
+    [elemView] {
+      position: absolute;
+      display: flex;
+      flex-flow: row;
+      width: 90vw;
+      height: 80vh;
+      background-color: var(--hand-fill);
+      border: 10px solid rgba(0, 0, 0, 0.2);
+
+      [props] {
+        display: flex;
+        flex-flow: column;
+        flex: 1;
+        padding: 1em;
+
+        gap: 1em;
+
+        div[name] {
+          font-size: 2em;
+          font-weight: bold;
+          padding: 0;
+        }
+
+        [propName] {
+          font-size: 75%;
+        }
+
+        [propValue] {
+          font-weight: bold;
+        }
+      }
+
+      cursor: pointer;
+
+      img {
+        width: 15em;
+        margin: 2em;
+      }
+    }
+  }
+}

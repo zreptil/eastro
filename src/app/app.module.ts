@@ -22,6 +22,8 @@ import {ProgressComponent} from '@/components/progress/progress.component';
 import {AutofocusDirective} from '@/_directives/autofocus.directive';
 import {ElementsComponent} from '@/components/elements/elements.component';
 import {AnimalsComponent} from './components/animals/animals.component';
+import {AppRoutingModule} from '@/app-routing.module';
+import { FiveElementsComponent } from './components/five-elements/five-elements.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,7 @@ import {AnimalsComponent} from './components/animals/animals.component';
     ImpressumComponent,
     ElementsComponent,
     AnimalsComponent,
+    FiveElementsComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,7 +51,8 @@ import {AnimalsComponent} from './components/animals/animals.component';
     HttpClientModule,
     DragDropModule,
     LogComponent,
-    ProgressComponent
+    ProgressComponent,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

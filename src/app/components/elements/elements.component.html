@@ -1,77 +1,77 @@
 <div [innerHTML]="globals?.svgCollection"></div>
-<div [ngStyle]="globals.styleForElement(currElement, currElement)" [ngSwitch]="elemView">
+<div [ngStyle]="globals.styleForElement(globals.currElement, globals.currElement)" [ngSwitch]="globals.elemView">
   <div *ngSwitchCase="0" elemview panel>
-    <div name>{{globals.nameForElement(currElement)}}</div>
-    <div (click)="toggleElemView()" [innerHtml]="calcElemRel()" relatement></div>
+    <div name>{{globals.nameForElement(globals.currElement)}}</div>
+    <div (click)="globals.toggleElemView()" [innerHtml]="calcElemRel()" relatement></div>
   </div>
   <div *ngSwitchCase="1" elemview panel>
-    <div name>{{globals.nameForElement(currElement)}}</div>
+    <div name>{{globals.nameForElement(globals.currElement)}}</div>
     <div elemrel>
-      <img (click)="toggleElemView()" [src]="imgForElement('curr')" alt="current element" current>
-      <img (click)="activate('createdBy')" [src]="imgForElement('createdBy')" alt="element 1" createdby>
-      <img (click)="activate('creates')" [src]="imgForElement('creates')" alt="element 2" creates>
-      <img (click)="activate('destroyedBy')" [src]="imgForElement('destroyedBy')" alt="element 3" destroyedby>
-      <img (click)="activate('destroys')" [src]="imgForElement('destroys')" alt="element 4" destroys>
-      <svg [ngStyle]="globals.styleForElement('createdBy', currElement)" createdby viewBox="0 0 511 511">
+      <img (click)="globals.toggleElemView()" [src]="imgForElement('curr')" alt="current element" current>
+      <img (click)="globals.activate('createdBy')" [src]="imgForElement('createdBy')" alt="element 1" createdby>
+      <img (click)="globals.activate('creates')" [src]="imgForElement('creates')" alt="element 2" creates>
+      <img (click)="globals.activate('destroyedBy')" [src]="imgForElement('destroyedBy')" alt="element 3" destroyedby>
+      <img (click)="globals.activate('destroys')" [src]="imgForElement('destroys')" alt="element 4" destroys>
+      <svg [ngStyle]="globals.styleForElement('createdBy', globals.currElement)" createdby viewBox="0 0 511 511">
         <use href="#hand"/>
       </svg>
-      <svg [ngStyle]="globals.styleForElement('curr', currElement)" creates viewBox="0 0 511 511">
+      <svg [ngStyle]="globals.styleForElement('curr', globals.currElement)" creates viewBox="0 0 511 511">
         <use href="#hand"/>
       </svg>
-      <svg [ngStyle]="globals.styleForElement('curr', currElement)" destroys viewBox="0 0 512 512">
+      <svg [ngStyle]="globals.styleForElement('curr', globals.currElement)" destroys viewBox="0 0 512 512">
         <use href="#fist"/>
       </svg>
-      <svg [ngStyle]="globals.styleForElement('destroyedBy', currElement)" destroyedby viewBox="0 0 512 512">
+      <svg [ngStyle]="globals.styleForElement('destroyedBy', globals.currElement)" destroyedby viewBox="0 0 512 512">
         <use href="#fist"/>
       </svg>
     </div>
   </div>
   <div *ngSwitchCase="2">
+    <div controls>
+      <ng-container *ngIf="globals._timeoutHandle==null">
+        <button (click)="globals.clickPlay($event)" mat-flat-button>
+          <mat-icon>play_arrow</mat-icon>
+          Abspielen
+        </button>
+        <button (click)="globals.changeDuration($event)" *ngIf="globals._timeoutHandle==null" mat-flat-button>{{globals.duration}}</button>
+      </ng-container>
+      <ng-container *ngIf="globals._timeoutHandle!=null">
+        <button (click)="globals.clickStop($event)" mat-flat-button>
+          <mat-icon>stop</mat-icon>
+          Stop
+        </button>
+      </ng-container>
+    </div>
     <div videoframe>
-      <div [style]="viewElemStyle" elemview panel video>
-        <div [style]="nextElemStyle" nextrel>
+      <div [style]="globals.viewElemStyle" elemview panel video>
+        <div [style]="globals.nextElemStyle" nextrel>
           <img [src]="imgForElement('creates')" alt="next element" current>
-          <div name>{{globals.nameForElement(nextElement)}}</div>
+          <div name>{{globals.nameForElement(globals.nextElement)}}</div>
           <div *ngFor="let prop of markProps" prop>
-            <div propName>{{markedProp(nextElement, prop).name}}</div>
-            <div propValue>{{markedProp(nextElement, prop).property}}</div>
+            <div propName>{{globals.markedProp(globals.nextElement, prop).name}}</div>
+            <div propValue>{{globals.markedProp(globals.nextElement, prop).property}}</div>
           </div>
         </div>
-        <div (click)="toggleElemView()" [style]="currElemStyle" elemrelvideo>
-          <img (click)="activateNextElement($event)" [src]="imgForElement('curr')" alt="current element" current>
-          <div timeout>{{timeLeft}}</div>
-          <div name>{{globals.nameForElement(currElement)}}</div>
+        <div (click)="globals.toggleElemView()" [style]="globals.currElemStyle" elemrelvideo>
+          <img (click)="globals.activateNextElement($event)" [src]="imgForElement('curr')" alt="current element" current>
+          <div timeout>{{globals.timeLeft}}</div>
+          <div name>{{globals.nameForElement(globals.currElement)}}</div>
           <div *ngFor="let prop of markProps" prop>
-            <div propName>{{markedProp(currElement, prop).name}}</div>
-            <div propValue>{{markedProp(currElement, prop).property}}</div>
+            <div propName>{{globals.markedProp(globals.currElement, prop).name}}</div>
+            <div propValue>{{globals.markedProp(globals.currElement, prop).property}}</div>
           </div>
         </div>
       </div>
-      <div controls>
-        <ng-container *ngIf="_timeoutHandle==null">
-          <button (click)="clickPlay($event)" mat-flat-button>
-            <mat-icon>play_arrow</mat-icon>
-            Abspielen
-          </button>
-          <button (click)="changeDuration($event)" *ngIf="_timeoutHandle==null" mat-flat-button>{{duration}}</button>
-        </ng-container>
-        <ng-container *ngIf="_timeoutHandle!=null">
-          <button (click)="clickStop($event)" mat-flat-button>
-            <mat-icon>stop</mat-icon>
-            Stop
-          </button>
-          <div progress>
-            <mat-progress-bar [value]="progress"></mat-progress-bar>
-          </div>
-        </ng-container>
-      </div>
+    </div>
+    <div *ngIf="globals._timeoutHandle!=null" progress>
+      <mat-progress-bar [value]="globals.progress"></mat-progress-bar>
     </div>
   </div>
 </div>
 <div panel>
   <div property-panel>
     <div (click)="activateProp(prop)"
-         *ngFor="let prop of globals.propsForElement(currElement)"
+         *ngFor="let prop of globals.propsForElement(globals.currElement)"
          [class]="classForProp(prop)"
          property>
       <div name>{{prop.name}}</div>
