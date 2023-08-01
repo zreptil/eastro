@@ -39,33 +39,65 @@
     [elemView] {
       position: absolute;
       display: flex;
-      flex-flow: row;
+      flex-flow: column;
       width: 90vw;
       height: 80vh;
+      max-height: 80vh;
       background-color: var(--hand-fill);
       border: 10px solid rgba(0, 0, 0, 0.2);
+      overflow-y: hidden;
 
-      [props] {
+      [elemPanel] {
         display: flex;
-        flex-flow: column;
+        flex-flow: row;
         flex: 1;
-        padding: 1em;
+        overflow-y: hidden;
 
-        gap: 1em;
+        [propPanel] {
+          overflow-y: hidden;
+          display: flex;
+          flex-flow: column;
+          flex: 1;
 
-        div[name] {
-          font-size: 2em;
-          font-weight: bold;
-          padding: 0;
+          [name] {
+            display: flex;
+            font-size: 2em;
+            font-weight: bold;
+            padding: 0.5em;
+          }
+
+          [props] {
+            display: flex;
+            flex-flow: column wrap;
+            padding: 1em;
+            gap: 1em;
+            flex: 1;
+
+            [prop] {
+              display: flex;
+              flex-flow: column wrap;
+
+              [propName] {
+                font-size: 75%;
+              }
+
+              [propValue] {
+                font-weight: bold;
+              }
+            }
+          }
         }
 
-        [propName] {
-          font-size: 75%;
-        }
+      }
 
-        [propValue] {
-          font-weight: bold;
-        }
+      [timeout] {
+        position: absolute;
+        top: 1em;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       cursor: pointer;

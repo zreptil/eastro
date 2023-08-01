@@ -1,5 +1,5 @@
 <div [style]="globals.styleForElement(globals.currElement, globals.currElement)" root>
-  <div controls>
+  <div *ngIf="globals._timeoutHandle==null" controls>
     <ng-container *ngIf="globals._timeoutHandle==null">
       <button (click)="globals.clickPlay($event)" mat-flat-button>
         <mat-icon>play_arrow</mat-icon>
@@ -13,30 +13,35 @@
         Stop
       </button>
     </ng-container>
-  </div>
-  <div *ngIf="globals._timeoutHandle!=null" progress>
-    <mat-progress-bar [value]="globals.progress"></mat-progress-bar>
+    <div *ngIf="globals._timeoutHandle!=null" progress>
+      <mat-progress-bar [value]="globals.progress"></mat-progress-bar>
+    </div>
   </div>
   <div [style]="globals.viewElemStyle" elements>
-    <div (click)="globals.activateNextElement($event)"
+    <div (click)="globals._timeoutHandle==null ? globals.activateNextElement($event) : globals.clickStop($event)"
          *ngFor="let elem of [
          {id: globals.nextElement, style: globals.nextElemStyle},
           {id: globals.currElement, style: globals.currElemStyle}
          ]"
          [style]="globals.styleForElement(elem.id, elem.id, elem.style)"
          elemView>
-      <div props>
-        <div name>{{globals.nameForElement(elem.id)}}</div>
-        <div *ngFor="let prop of markProps" prop>
-          <div propName>{{globals.markedProp(elem.id, prop).name}}</div>
-          <div propValue>{{globals.markedProp(elem.id, prop).property}}</div>
+      <div elemPanel>
+        <div propPanel>
+          <div name>{{globals.nameForElement(elem.id)}}</div>
+          <div props>
+            <div *ngFor="let prop of markProps" prop>
+              <div propName>{{globals.markedProp(elem.id, prop).name}}</div>
+              <div propValue>{{globals.markedProp(elem.id, prop).property}}</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <img [src]="globals.imgForElement(elem.id, 'curr')"
+               alt="element"
+               current>
         </div>
       </div>
-      <div>
-        <img [src]="globals.imgForElement(elem.id, 'curr')"
-             alt="element"
-             current>
-      </div>
+      <div timeout>{{globals.timeLeft}}</div>
     </div>
   </div>
 </div>

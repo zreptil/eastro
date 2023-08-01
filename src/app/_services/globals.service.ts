@@ -188,7 +188,7 @@ export class GlobalsService {
   activate(idx: string) {
     const nextElement = this.getElement(this.currElement, idx);
     if (this.elemView === 2) {
-      const duration = 3;
+      const duration = 2;
       this.currElemStyle = `fadeOut ${duration}s ease-in-out normal`;
       this.nextElemStyle = `fadeIn ${duration}s ease-in-out normal`;
       this.viewElemStyle = `--ad:${duration / 2}s;animation:fadeColor ${duration}s ease-in-out normal;--bf:var(--elem-${this.currElement}-back);--bt:var(--elem-${nextElement}-back);--ff:var(--elem-${this.currElement}-fore);--ft:var(--elem-${nextElement}-fore)`;
@@ -207,6 +207,7 @@ export class GlobalsService {
     evt?.stopPropagation();
     clearTimeout(this._timeoutHandle);
     this._timeoutHandle = null;
+    this._timeLeft = '';
   }
 
   changeDuration(evt: MouseEvent) {
