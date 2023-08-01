@@ -397,3 +397,39 @@ div[property-panel] {
     background-color: var(--bt);
   }
 }
+
+@keyframes fall {
+  0% {
+    transform: translate(-20px, 0) rotate(25deg);
+  }
+  50% {
+    transform: translate(20px, 100%) rotate(-50deg);
+  }
+  100% {
+    transform: translate(-20px, 200%) rotate(25deg);
+  }
+}
+
+@keyframes raise {
+  0% {
+    transform: translate(-20px, 200%) rotate(25deg);
+  }
+  50% {
+    transform: translate(20px, 100%) rotate(-50deg);
+  }
+  100% {
+    transform: translate(-20px, 0%) rotate(25deg);
+  }
+}
+
+@keyframes up {
+  0% {
+    transform: translate(-20px, 200%);
+  }
+  50% {
+    transform: translate(20px, 100%);
+  }
+  100% {
+    transform: translate(-20px, 0%);
+  }
+}

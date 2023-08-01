@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {GLOBALS, GlobalsService} from '@/_services/globals.service';
 import {SyncService} from '@/_services/sync/sync.service';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -16,8 +15,7 @@ export class MainComponent {
   ];
 
   constructor(public globals: GlobalsService,
-              public sync: SyncService,
-              public router: Router) {
+              public sync: SyncService) {
   }
 
   get classForHeader(): string[] {
@@ -26,15 +24,6 @@ export class MainComponent {
       ret.push('debug');
     }
     return ret;
-  }
-
-  setCurrentPage(page: string): void {
-    if (page.startsWith('@')) {
-      this.router.navigate([page.substring(1)]);
-      return;
-    }
-    GLOBALS.currentPage = page;
-    GLOBALS.saveSharedData();
   }
 
   classForToolbarbutton(btn: any): string[] {

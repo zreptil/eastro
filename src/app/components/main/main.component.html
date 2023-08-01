@@ -9,7 +9,7 @@
         <mat-icon *ngIf="!globals.isDebug">bug_report</mat-icon>
         <mat-icon *ngIf="globals.isDebug">pest_control</mat-icon>
       </button>
-      <button (click)="setCurrentPage(btn.page)"
+      <button (click)="globals.setCurrentPage(btn.page)"
               *ngFor="let btn of toolbarButtons"
               [class]="classForToolbarbutton(btn)" mat-flat-button>
         {{btn.label}}
@@ -35,18 +35,20 @@
       -->
     </div>
   </div>
-  <div contentpanel>
-    <div sidebar>
-    </div>
-    <div contentback>
-      <div content>
-        <ng-container [ngSwitch]="globals.currentPage">
-          <app-animals *ngSwitchCase="'animals'" [event]="globals?.zodiacEvent"></app-animals>
-          <app-elements *ngSwitchCase="'elements'" [event]="globals?.zodiacEvent"></app-elements>
-        </ng-container>
+  <!--
+    <div contentpanel>
+      <div sidebar>
+      </div>
+      <div contentback>
+        <div content>
+          <ng-container [ngSwitch]="globals.currentPage">
+            <app-animals *ngSwitchCase="'animals'" [event]="globals?.zodiacEvent"></app-animals>
+            <app-elements *ngSwitchCase="'elements'" [event]="globals?.zodiacEvent"></app-elements>
+          </ng-container>
+        </div>
       </div>
     </div>
-  </div>
+  -->
 </div>
 <app-progress></app-progress>
 <div hidden id="mark"></div>

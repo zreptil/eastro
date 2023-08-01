@@ -10,7 +10,12 @@
     display: flex;
     flex-flow: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+
+    div {
+      display: flex;
+      justify-content: center;
+    }
 
     div[progress] {
       display: flex;
@@ -45,30 +50,59 @@
       max-height: 80vh;
       background-color: var(--hand-fill);
       border: 10px solid rgba(0, 0, 0, 0.2);
-      overflow-y: hidden;
+      overflow: hidden;
+
+      .snow {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+
+        ::ng-deep .flake {
+          transform-origin: top left;
+          font-size: 1em;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          color: white;
+        }
+      }
 
       [elemPanel] {
         display: flex;
-        flex-flow: row;
+        flex-flow: column;
         flex: 1;
         overflow-y: hidden;
 
-        [propPanel] {
-          overflow-y: hidden;
+        [elemLine] {
+          overflow: hidden;
           display: flex;
-          flex-flow: column;
+          flex-flow: row;
+          justify-content: space-between;
           flex: 1;
 
           [name] {
             display: flex;
-            font-size: 2em;
+            font-size: 10em;
             font-weight: bold;
             padding: 0.5em;
           }
 
+
+          img {
+            width: 15em;
+            margin: 2em;
+          }
+        }
+
+        [propPanel] {
+
           [props] {
             display: flex;
-            flex-flow: column wrap;
+            flex-flow: row wrap;
+            align-items: end;
+            justify-content: space-between;
             padding: 1em;
             gap: 1em;
             flex: 1;
@@ -78,10 +112,11 @@
               flex-flow: column wrap;
 
               [propName] {
-                font-size: 75%;
+                font-size: 2em;
               }
 
               [propValue] {
+                font-size: 3.5em;
                 font-weight: bold;
               }
             }
@@ -101,11 +136,6 @@
       }
 
       cursor: pointer;
-
-      img {
-        width: 15em;
-        margin: 2em;
-      }
     }
   }
 }

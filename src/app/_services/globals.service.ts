@@ -10,6 +10,7 @@ import {LanguageService} from '@/_services/language.service';
 import {EnvironmentService} from '@/_services/environment.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {ZodiacEventData} from '@/_model/zodiac-event-data';
+import {Router} from '@angular/router';
 
 class CustomTimeoutError extends Error {
   constructor() {
@@ -66,7 +67,8 @@ export class GlobalsService {
               public sync: SyncService,
               public ls: LanguageService,
               public env: EnvironmentService,
-              public sanitizer: DomSanitizer) {
+              public sanitizer: DomSanitizer,
+              public router: Router) {
 
     GLOBALS = this;
     this.loadWebData();
@@ -124,7 +126,7 @@ export class GlobalsService {
     return document.querySelector('head>title').innerHTML;
   }
 
-  _duration = 10000;
+  _duration = 120000;
 
   get duration(): string {
     if (this._duration % 60000 === 0) {
@@ -146,17 +148,17 @@ export class GlobalsService {
     return this.getElement(this.currElement, 'creates');
   }
 
-  clickPlay(evt: MouseEvent) {
+  clickPlay(evt: MouseEvent, onElemChange?: (elem: string) => void) {
     evt?.stopPropagation();
     if (evt != null) {
       this._nextChange = new Date().getTime() + GLOBALS._duration;
       this.progress = 0;
       this._timeLeft = '';
     }
-    this._timeoutHandle = setTimeout(() => this.doStep(), 900);
+    this._timeoutHandle = setTimeout(() => this.doStep(onElemChange), 900);
   }
 
-  doStep() {
+  doStep(onElemChange?: (elem: string) => void) {
     const timeout = 900;
     const now = new Date().getTime();
     this.progress = (1 - (this._nextChange - now - timeout) / GLOBALS._duration) * 100;
@@ -165,16 +167,16 @@ export class GlobalsService {
     const s = `${left % 60}`.padStart(2, '0');
     this._timeLeft = `${m}:${s}`;
     if (now >= this._nextChange) {
-      this.activateNextElement(null);
+      this.activateNextElement(null, onElemChange);
       this._nextChange = new Date().getTime() + GLOBALS._duration;
       this.progress = 0;
     }
-    this.clickPlay(null);
+    this.clickPlay(null, onElemChange);
   }
 
-  activateNextElement(evt: MouseEvent) {
+  activateNextElement(evt: MouseEvent, onElemChange?: (elem: string) => void) {
     evt?.stopPropagation();
-    this.activate('creates');
+    this.activate('creates', onElemChange);
   }
 
   toggleElemView() {
@@ -185,7 +187,7 @@ export class GlobalsService {
     this.elemView = view;
   }
 
-  activate(idx: string) {
+  activate(idx: string, onElemChange?: (elem: string) => void) {
     const nextElement = this.getElement(this.currElement, idx);
     if (this.elemView === 2) {
       const duration = 2;
@@ -194,13 +196,24 @@ export class GlobalsService {
       this.viewElemStyle = `--ad:${duration / 2}s;animation:fadeColor ${duration}s ease-in-out normal;--bf:var(--elem-${this.currElement}-back);--bt:var(--elem-${nextElement}-back);--ff:var(--elem-${this.currElement}-fore);--ft:var(--elem-${nextElement}-fore)`;
       setTimeout(() => {
         this.currElement = nextElement;
+        onElemChange?.(this.currElement);
         this.viewElemStyle = '';
         this.currElemStyle = '';
         this.nextElemStyle = '';
       }, duration * 990);
     } else {
       this.currElement = nextElement;
+      onElemChange?.(this.currElement);
     }
+  }
+
+  setCurrentPage(page: string): void {
+    if (page.startsWith('@')) {
+      this.router.navigate([page.substring(1)]);
+      return;
+    }
+    this.currentPage = page;
+    this.saveSharedData();
   }
 
   clickStop(evt: MouseEvent) {

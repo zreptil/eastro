@@ -1,11 +1,21 @@
 <div [style]="globals.styleForElement(globals.currElement, globals.currElement)" root>
   <div *ngIf="globals._timeoutHandle==null" controls>
     <ng-container *ngIf="globals._timeoutHandle==null">
-      <button (click)="globals.clickPlay($event)" mat-flat-button>
-        <mat-icon>play_arrow</mat-icon>
-        Abspielen
-      </button>
-      <button (click)="globals.changeDuration($event)" *ngIf="globals._timeoutHandle==null" mat-flat-button>{{globals.duration}}</button>
+      <div>
+        <button (click)="globals.setCurrentPage('@elements')" mat-icon-button>
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+      </div>
+      <div>
+        <button (click)="globals.clickPlay($event, initSeason.bind(this))" mat-flat-button>
+          <mat-icon>play_arrow</mat-icon>
+          Abspielen
+        </button>
+        <div>
+          <button (click)="globals.changeDuration($event)" *ngIf="globals._timeoutHandle==null" mat-flat-button>{{globals.duration}}</button>
+        </div>
+      </div>
+      <div></div>
     </ng-container>
     <ng-container *ngIf="globals._timeoutHandle!=null">
       <button (click)="globals.clickStop($event)" mat-flat-button>
@@ -18,27 +28,30 @@
     </div>
   </div>
   <div [style]="globals.viewElemStyle" elements>
-    <div (click)="globals._timeoutHandle==null ? globals.activateNextElement($event) : globals.clickStop($event)"
+    <div (click)="clickElement($event)"
          *ngFor="let elem of [
          {id: globals.nextElement, style: globals.nextElemStyle},
           {id: globals.currElement, style: globals.currElemStyle}
          ]"
          [style]="globals.styleForElement(elem.id, elem.id, elem.style)"
          elemView>
+      <div [innerHTML]="snow" class="snow"></div>
       <div elemPanel>
-        <div propPanel>
+        <div elemLine>
           <div name>{{globals.nameForElement(elem.id)}}</div>
+          <div>
+            <img [src]="globals.imgForElement(elem.id, 'curr')"
+                 alt="element"
+                 current>
+          </div>
+        </div>
+        <div propPanel>
           <div props>
             <div *ngFor="let prop of markProps" prop>
               <div propName>{{globals.markedProp(elem.id, prop).name}}</div>
               <div propValue>{{globals.markedProp(elem.id, prop).property}}</div>
             </div>
           </div>
-        </div>
-        <div>
-          <img [src]="globals.imgForElement(elem.id, 'curr')"
-               alt="element"
-               current>
         </div>
       </div>
       <div timeout>{{globals.timeLeft}}</div>
