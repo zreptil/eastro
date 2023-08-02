@@ -35,20 +35,14 @@
       -->
     </div>
   </div>
-  <!--
-    <div contentpanel>
-      <div sidebar>
-      </div>
-      <div contentback>
-        <div content>
-          <ng-container [ngSwitch]="globals.currentPage">
-            <app-animals *ngSwitchCase="'animals'" [event]="globals?.zodiacEvent"></app-animals>
-            <app-elements *ngSwitchCase="'elements'" [event]="globals?.zodiacEvent"></app-elements>
-          </ng-container>
-        </div>
-      </div>
+  <div>
+    <div content>
+      <ng-container [ngSwitch]="globals.currentPage">
+        <app-animals *ngSwitchCase="'animals'" [event]="globals?.zodiacEvent"></app-animals>
+        <app-elements *ngSwitchCase="'elements'" [event]="globals?.zodiacEvent"></app-elements>
+      </ng-container>
     </div>
-  -->
+  </div>
 </div>
 <app-progress></app-progress>
 <div hidden id="mark"></div>
