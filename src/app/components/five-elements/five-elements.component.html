@@ -58,7 +58,6 @@
          ]"
          [style]="globals.styleForElement(elem.id, elem.id, elem.style)"
          elemView>
-      <app-animator [animDefs]="animDefs" [animId]="animId"></app-animator>
       <div elemPanel>
         <div elemLine>
           <div name>{{globals.nameForElement(elem.id)}}</div>
@@ -79,5 +78,6 @@
       </div>
       <div timeout>{{globals.timeLeft}}</div>
     </div>
+    <app-animator [animDefs]="animDefs" [animId]="animId"></app-animator>
   </div>
 </div>
