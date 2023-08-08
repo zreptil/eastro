@@ -6,32 +6,53 @@
   width: 100vw;
   height: 100vh;
 
-  [controls] {
+  [startPage] {
     display: flex;
-    flex-flow: row;
+    flex-flow: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--5elemstart-back);
+    color: var(--5elemstart-fore);
 
-    div {
-      display: flex;
-      justify-content: center;
+    [name] {
+      font-size: 4em;
+      font-weight: bold;
     }
 
-    div[progress] {
+    [controls] {
       display: flex;
-      align-content: center;
-      align-items: center;
-      height: 60px;
+      flex-flow: row;
       flex: 1;
-      padding-right: 10px;
-    }
+      align-items: center;
+      justify-content: space-between;
 
-    ::ng-deep .mat-progress-bar-buffer {
-      background-color: rgba(0, 0, 0, 0.5);
-    }
+      button {
+        color: var(--5elemstart-fore);
+      }
 
-    ::ng-deep .mat-progress-bar-fill::after {
-      background-color: yellow;
+      div {
+        display: flex;
+        justify-content: center;
+      }
+
+      div[progress] {
+        display: flex;
+        align-content: center;
+        align-items: center;
+        height: 60px;
+        flex: 1;
+        padding-right: 10px;
+      }
+
+      ::ng-deep .mat-progress-bar-buffer {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      ::ng-deep .mat-progress-bar-fill::after {
+        background-color: yellow;
+      }
     }
   }
 
@@ -40,6 +61,27 @@
     flex: 1;
     align-items: center;
     justify-content: center;
+
+    [controls] {
+      opacity: 0.1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+
+    [controls]:hover {
+      opacity: 1;
+    }
+
+    [imgPanel] {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
 
     [elemView] {
       position: absolute;
@@ -51,23 +93,6 @@
       background-color: var(--hand-fill);
       border: 10px solid rgba(0, 0, 0, 0.2);
       overflow: hidden;
-
-      .snow {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        left: 0;
-        top: 0;
-
-        ::ng-deep .flake {
-          transform-origin: top left;
-          font-size: 1em;
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          color: white;
-        }
-      }
 
       [elemPanel] {
         display: flex;
@@ -133,6 +158,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 3em;
       }
 
       cursor: pointer;

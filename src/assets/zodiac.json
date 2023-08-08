@@ -1266,7 +1266,7 @@
       "type": "element",
       "typeId": 1,
       "name": "Farbe",
-      "property": "gruen"
+      "property": "Grün"
     },
     {
       "type": "element",
@@ -1284,7 +1284,7 @@
       "type": "element",
       "typeId": 1,
       "name": "Jahreszeit",
-      "property": "Fruehling"
+      "property": "Frühling"
     },
     {
       "type": "element",
@@ -1380,7 +1380,7 @@
       "type": "element",
       "typeId": 2,
       "name": "Farbe",
-      "property": "rot"
+      "property": "Rot"
     },
     {
       "type": "element",
@@ -1494,7 +1494,7 @@
       "type": "element",
       "typeId": 3,
       "name": "Farbe",
-      "property": "gelb"
+      "property": "Gelb"
     },
     {
       "type": "element",
@@ -1512,7 +1512,7 @@
       "type": "element",
       "typeId": 3,
       "name": "Jahreszeit",
-      "property": "alle"
+      "property": "Alle"
     },
     {
       "type": "element",
@@ -1608,7 +1608,7 @@
       "type": "element",
       "typeId": 4,
       "name": "Farbe",
-      "property": "weiss"
+      "property": "Weiss"
     },
     {
       "type": "element",
@@ -1722,7 +1722,7 @@
       "type": "element",
       "typeId": 5,
       "name": "Farbe",
-      "property": "blau"
+      "property": "Blau"
     },
     {
       "type": "element",

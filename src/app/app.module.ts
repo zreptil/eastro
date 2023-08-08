@@ -24,6 +24,7 @@ import {ElementsComponent} from '@/components/elements/elements.component';
 import {AnimalsComponent} from './components/animals/animals.component';
 import {AppRoutingModule} from '@/app-routing.module';
 import { FiveElementsComponent } from './components/five-elements/five-elements.component';
+import { AnimatorComponent } from './components/animator/animator.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { FiveElementsComponent } from './components/five-elements/five-elements.
     ElementsComponent,
     AnimalsComponent,
     FiveElementsComponent,
+    AnimatorComponent,
   ],
   imports: [
     BrowserModule,

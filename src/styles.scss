@@ -160,6 +160,9 @@ body {
   --elem-3-fore: rgba(0, 0, 0, 0.7);
   --elem-4-fore: rgba(0, 0, 0, 0.7);
   --elem-5-fore: rgba(255, 255, 255, 0.5);
+
+  --5elemstart-back: black;
+  --5elemstart-fore: silver;
 }
 
 mat-icon[small] {
@@ -422,14 +425,14 @@ div[property-panel] {
   }
 }
 
-@keyframes up {
+@keyframes sun {
   0% {
-    transform: translate(-20px, 200%);
+    transform: translate(15%, 140%);
   }
   50% {
-    transform: translate(20px, 100%);
+    transform: translate(40%, 50%);
   }
   100% {
-    transform: translate(-20px, 0%);
+    transform: translate(50%, -10%);
   }
 }

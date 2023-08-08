@@ -1,33 +1,56 @@
-<div [style]="globals.styleForElement(globals.currElement, globals.currElement)" root>
-  <div *ngIf="globals._timeoutHandle==null" controls>
-    <ng-container *ngIf="globals._timeoutHandle==null">
-      <div>
-        <button (click)="globals.setCurrentPage('@elements')" mat-icon-button>
-          <mat-icon>arrow_back</mat-icon>
-        </button>
-      </div>
-      <div>
-        <button (click)="globals.clickPlay($event, initSeason.bind(this))" mat-flat-button>
-          <mat-icon>play_arrow</mat-icon>
-          Abspielen
-        </button>
-        <div>
-          <button (click)="globals.changeDuration($event)" *ngIf="globals._timeoutHandle==null" mat-flat-button>{{globals.duration}}</button>
-        </div>
-      </div>
-      <div></div>
-    </ng-container>
-    <ng-container *ngIf="globals._timeoutHandle!=null">
-      <button (click)="globals.clickStop($event)" mat-flat-button>
-        <mat-icon>stop</mat-icon>
-        Stop
+<div [style]="rootStyle" root>
+  <!-- startpage -->
+  <div *ngIf="globals.currElement==null" startPage>
+    <div controls name>Die fünf Elemente</div>
+    <div controls>
+      <button (click)="activateElement($event, elem)"
+              *ngFor="let elem of ['4', '5', '1', '2', '3']" mat-icon-button>
+        <img [src]="globals.imgForElement(elem, 'curr')" alt="element">
       </button>
-    </ng-container>
-    <div *ngIf="globals._timeoutHandle!=null" progress>
-      <mat-progress-bar [value]="globals.progress"></mat-progress-bar>
+    </div>
+    <div *ngIf="globals._timeoutHandle==null" controls>
+      <ng-container *ngIf="globals._timeoutHandle==null">
+        <div>
+          <button (click)="globals.setCurrentPage('@elements')" mat-icon-button>
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+        </div>
+        <div>
+          <button (click)="clickPlay($event)" mat-flat-button>
+            <mat-icon>play_arrow</mat-icon>
+            Abspielen
+          </button>
+          <div>
+            <button (click)="globals.changeDuration($event)" *ngIf="globals._timeoutHandle==null" mat-flat-button>
+              {{globals.duration}}
+            </button>
+          </div>
+        </div>
+        <div></div>
+      </ng-container>
+      <ng-container *ngIf="globals._timeoutHandle!=null">
+        <button (click)="globals.clickStop($event)" mat-flat-button>
+          <mat-icon>stop</mat-icon>
+          Stop
+        </button>
+      </ng-container>
+      <div *ngIf="globals._timeoutHandle!=null" progress>
+        <mat-progress-bar [value]="globals.progress"></mat-progress-bar>
+      </div>
     </div>
   </div>
-  <div [style]="globals.viewElemStyle" elements>
+  <!-- element -->
+  <div (click)="globals.clickStop($event)"
+       *ngIf="globals.currElement!=null"
+       [style]="globals.viewElemStyle" elements>
+    <div controls>
+      <button (click)="globals.clickStop($event)" mat-icon-button>
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <button (click)="clickReplay($event)" mat-icon-button>
+        <mat-icon>play_circle</mat-icon>
+      </button>
+    </div>
     <div (click)="clickElement($event)"
          *ngFor="let elem of [
          {id: globals.nextElement, style: globals.nextElemStyle},
@@ -35,11 +58,11 @@
          ]"
          [style]="globals.styleForElement(elem.id, elem.id, elem.style)"
          elemView>
-      <div [innerHTML]="snow" class="snow"></div>
+      <app-animator [animDefs]="animDefs" [animId]="animId"></app-animator>
       <div elemPanel>
         <div elemLine>
           <div name>{{globals.nameForElement(elem.id)}}</div>
-          <div>
+          <div imgPanel>
             <img [src]="globals.imgForElement(elem.id, 'curr')"
                  alt="element"
                  current>

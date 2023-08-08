@@ -47,11 +47,11 @@ export class GlobalsService {
   svgCollection: SafeHtml;
   public listAnimals: any[] = [];
   public colors: any = {
-    gruen: {fill: 'var(--elem-1-back)', text: 'var(--elem-1-fore)'},
-    rot: {fill: 'var(--elem-2-back)', text: 'var(--elem-2-fore)'},
-    gelb: {fill: 'var(--elem-3-back)', text: 'var(--elem-3-fore)'},
-    weiss: {fill: 'var(--elem-4-back)', text: 'var(--elem-4-fore)'},
-    blau: {fill: 'var(--elem-5-back)', text: 'var(--elem-5-fore)'}
+    'Grün': {fill: 'var(--elem-1-back)', text: 'var(--elem-1-fore)'},
+    Rot: {fill: 'var(--elem-2-back)', text: 'var(--elem-2-fore)'},
+    Gelb: {fill: 'var(--elem-3-back)', text: 'var(--elem-3-fore)'},
+    Weiss: {fill: 'var(--elem-4-back)', text: 'var(--elem-4-fore)'},
+    Blau: {fill: 'var(--elem-5-back)', text: 'var(--elem-5-fore)'}
   };
   _timeoutHandle: number;
   _nextChange: number;
@@ -129,13 +129,14 @@ export class GlobalsService {
   _duration = 120000;
 
   get duration(): string {
+    let ret = `${this._duration / 1000} Sekunden`;
     if (this._duration % 60000 === 0) {
-      return Utils.plural(this._duration / 60000, {
+      ret = Utils.plural(this._duration / 60000, {
         1: `1 Minute`,
         other: `${this._duration / 60000} Minuten`
       });
     }
-    return `${this._duration / 1000} Sekunden`;
+    return `${ret} pro Element`;
   }
 
   _timeLeft: string;
@@ -176,6 +177,7 @@ export class GlobalsService {
 
   activateNextElement(evt: MouseEvent, onElemChange?: (elem: string) => void) {
     evt?.stopPropagation();
+    onElemChange?.(null);
     this.activate('creates', onElemChange);
   }
 
@@ -200,7 +202,7 @@ export class GlobalsService {
         this.viewElemStyle = '';
         this.currElemStyle = '';
         this.nextElemStyle = '';
-      }, duration * 990);
+      }, duration * 1000);
     } else {
       this.currElement = nextElement;
       onElemChange?.(this.currElement);
@@ -218,6 +220,7 @@ export class GlobalsService {
 
   clickStop(evt: MouseEvent) {
     evt?.stopPropagation();
+    this.currElement = null;
     clearTimeout(this._timeoutHandle);
     this._timeoutHandle = null;
     this._timeLeft = '';
@@ -305,7 +308,6 @@ export class GlobalsService {
           list.push({...data?.animals[key], key: key});
         }
         this.listAnimals = list;
-        console.log(this.zodiacData);
       });
     }
   }
