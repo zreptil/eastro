@@ -436,3 +436,12 @@ div[property-panel] {
     transform: translate(50%, -10%);
   }
 }
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(-45deg);
+  }
+  100% {
+    transform: rotate(45deg);
+  }
+}

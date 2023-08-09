@@ -16,6 +16,7 @@ export class AnimationData {
   size: AnimationLimits;
   x: AnimationLimits;
   y: AnimationLimits;
+  static?: any;
 }
 
 @Component({
@@ -38,6 +39,10 @@ export class AnimatorComponent {
     this.initAnimation();
   }
 
+  get staticImage(): string {
+    return this.anim?.img != null ? `assets/images/seasons/${this.anim?.img}-static.png` : '';
+  }
+
   private _animId: string;
 
   @Input()
@@ -46,8 +51,8 @@ export class AnimatorComponent {
     this.initAnimation();
   }
 
-  @Input()
-  set animationData(_value: AnimationData) {
+  get anim(): AnimationData {
+    return this._animDefs.find(a => a.id === this._animId);
   }
 
   private initAnimation(): void {
@@ -56,7 +61,7 @@ export class AnimatorComponent {
       return;
     }
     const temp = [];
-    const defs = this._animDefs.find(a => a.id === this._animId);
+    const defs = this.anim;
     let src = defs;
     const count = defs?.count ?? 150;
     const srcDefs: AnimationData[] = [];

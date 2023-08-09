@@ -4,6 +4,7 @@
   position: absolute;
   left: 0;
   top: 0;
+  pointer-events: none;
 
   ::ng-deep .flake {
     transform-origin: top left;
@@ -13,4 +14,18 @@
     height: 100%;
     color: white;
   }
+}
+
+[static] {
+  position: absolute;
+  display: flex;
+  opacity: 0;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 5s ease-in-out 5s normal forwards;
+}
+
+[staticImage] {
+  height: 100%;
 }

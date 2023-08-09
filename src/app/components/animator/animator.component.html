@@ -1,1 +1,4 @@
+<div [ngStyle]="anim?.static?.style ?? {display: 'none'}" static>
+  <img [ngStyle]="anim?.static?.styleImage" [src]="staticImage" alt="static image" staticImage>
+</div>
 <div [innerHTML]="animationString" class="anim"></div>

@@ -13,10 +13,87 @@ export class FiveElementsComponent {
   markProps: string[] = [];
   animId: string;
   animDefs: AnimationData[] = [
-    {id: 'Herbst', class: 'flake', img: 'fall', count: 75, animName: 'fall', size: {min: 10, max: 210}, x: {min: -20, max: 100}, y: {min: -20, max: -80}},
-    {id: 'Winter', class: 'flake', img: 'winter', count: 75, animName: 'fall', size: {min: 10, max: 210}, x: {min: -20, max: 100}, y: {min: -20, max: -80}},
-    {id: 'Frühling', class: 'flake', img: 'spring', count: 75, animName: 'raise', size: {min: 10, max: 210}, x: {min: -20, max: 100}, y: {min: -20, max: -80}},
-    {id: 'Sommer', class: 'flake', img: 'summer', count: 1, animName: 'sun', size: {min: 500, max: 500}, x: {min: 5, max: 5}, y: {min: -20, max: -20}},
+    {
+      id: 'Herbst',
+      class: 'flake',
+      img: 'fall',
+      count: 75,
+      animName: 'fall',
+      size: {min: 10, max: 210},
+      x: {min: -20, max: 100},
+      y: {min: -20, max: -80},
+      static: {
+        style: {
+          display: 'flex', left: '25%', bottom: '12%',
+          height: '100px',
+        },
+        styleImage: {
+          transformOrigin: '75px 5px',
+          animation: 'wiggle 4s ease-in-out infinite alternate'
+        }
+      }
+    },
+    {
+      id: 'Winter',
+      class: 'flake',
+      img: 'winter',
+      count: 75,
+      animName: 'fall',
+      size: {min: 10, max: 210},
+      x: {min: -20, max: 100},
+      y: {min: -20, max: -80},
+      static: {
+        style: {
+          display: 'flex', left: '60%', bottom: '10%',
+          height: '200px',
+        },
+        styleImage: {
+          transformOrigin: 'center 190px',
+          animation: 'wiggle 4s ease-in-out infinite alternate'
+        }
+      }
+    },
+    {
+      id: 'Frühling',
+      class: 'flake',
+      img: 'spring',
+      count: 75,
+      animName: 'raise',
+      size: {min: 10, max: 210},
+      x: {min: -20, max: 100},
+      y: {min: -20, max: -80},
+      static: {
+        style: {
+          display: 'flex', left: '25%', bottom: '10%',
+          height: '200px',
+        },
+        styleImage: {
+          transformOrigin: 'center 190px',
+          animation: 'wiggle 4s ease-in-out infinite alternate'
+        }
+      }
+    },
+    {
+      id: 'Sommer',
+      class: 'flake',
+      img: 'summer',
+      count: 1,
+      animName: 'sun',
+      size: {min: 500, max: 500},
+      x: {min: 5, max: 5},
+      y: {min: -20, max: -20},
+      static: {
+        style: {
+          display: 'flex', left: '55%', top: '10%',
+          height: '180px',
+          animation: 'fadeIn 5s ease-in-out 7s normal forwards'
+        },
+        styleImage: {
+          transformOrigin: 'center center',
+          animation: 'wiggle 4s ease-in-out infinite alternate'
+        }
+      }
+    },
   ];
 
   constructor(public sanitizer: DomSanitizer) {
