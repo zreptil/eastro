@@ -30,7 +30,14 @@
         </div>
         <div vert>
           <mat-slide-toggle [(ngModel)]="globals.animShowAnimation">Jahreszeit-Animationen</mat-slide-toggle>
-          <mat-slide-toggle [(ngModel)]="globals.animShowStatic" [disabled]="!globals.animShowAnimation">Jahreszeit-Bilder</mat-slide-toggle>
+          <ng-container *ngIf="globals.animShowAnimation">
+            <mat-slide-toggle [(ngModel)]="globals.animShowStatic">Jahreszeit-Bilder</mat-slide-toggle>
+            <div>
+              <mat-slider [(value)]="globals.animWiggleDuration" [disabled]="!globals.animShowStatic || !globals.animShowAnimation" max="20" min="1" step="1" thumbLabel>
+              </mat-slider>
+              {{globals.animWiggleDuration}} Sekunden
+            </div>
+          </ng-container>
         </div>
       </ng-container>
       <ng-container *ngIf="globals._timeoutHandle!=null">

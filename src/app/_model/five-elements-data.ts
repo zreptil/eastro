@@ -4,6 +4,7 @@ export class FiveElementsData extends BaseData {
   animShowStatic = true;
   animShowAnimation = true;
   animDuration = 0;
+  animWiggleDuration = 4;
 
   get _asJsonString(): string {
     return JSON.stringify(this.asJson);
@@ -13,7 +14,8 @@ export class FiveElementsData extends BaseData {
     return {
       c1: this.animShowStatic,
       c2: this.animDuration,
-      c3: this.animShowAnimation
+      c3: this.animShowAnimation,
+      c4: this.animWiggleDuration
     }
   }
 
@@ -30,5 +32,6 @@ export class FiveElementsData extends BaseData {
     this.animShowStatic = json['c1'] ?? true;
     this.animDuration = json['c2'] ?? 10000;
     this.animShowAnimation = json['c3'] ?? true;
+    this.animWiggleDuration = json['c4'] ?? 4;
   }
 }

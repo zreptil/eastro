@@ -12,6 +12,7 @@ export class FiveElementsComponent {
 
   markProps: string[] = [];
   animId: string;
+  wiggle = `wiggle ${GLOBALS.cfgFiveElements.animWiggleDuration}s ease-in-out infinite alternate`;
 
   constructor(public sanitizer: DomSanitizer) {
     GLOBALS.currElement = null;
@@ -41,7 +42,7 @@ export class FiveElementsComponent {
         img: 'fall',
         styleImage: {
           transformOrigin: '75px 5px',
-          animation: 'wiggle 4s ease-in-out infinite alternate'
+          animation: this.wiggle
         }
       }, {
         style: {
@@ -54,7 +55,7 @@ export class FiveElementsComponent {
         img: 'fall',
         styleImage: {
           transformOrigin: '75px 5px',
-          animation: 'wiggle 4s ease-in-out infinite alternate'
+          animation: this.wiggle
         }
       }]
     },
@@ -77,7 +78,7 @@ export class FiveElementsComponent {
         img: 'winter',
         styleImage: {
           transformOrigin: 'center 190px',
-          animation: 'wiggle 4s ease-in-out infinite alternate'
+          animation: this.wiggle
         }
       }, {
         style: {
@@ -88,7 +89,7 @@ export class FiveElementsComponent {
         img: 'winter',
         styleImage: {
           transformOrigin: 'center 190px',
-          animation: 'wiggle 4s ease-in-out infinite alternate'
+          animation: this.wiggle
         }
       }]
     },
@@ -111,7 +112,7 @@ export class FiveElementsComponent {
         img: 'spring',
         styleImage: {
           transformOrigin: 'center 190px',
-          animation: 'wiggle 4s ease-in-out infinite alternate'
+          animation: this.wiggle
         }
       }, {
         style: {
@@ -122,7 +123,7 @@ export class FiveElementsComponent {
         img: 'spring',
         styleImage: {
           transformOrigin: 'center 190px',
-          animation: 'wiggle 4s ease-in-out infinite alternate'
+          animation: this.wiggle
         }
       }]
     },
@@ -137,8 +138,7 @@ export class FiveElementsComponent {
         },
         img: 'summer',
         styleImage: {
-          // transformOrigin: 'center 190px',
-          animation: 'wiggle 4s ease-in-out infinite alternate'
+          animation: this.wiggle
         }
       }],
       anim: {

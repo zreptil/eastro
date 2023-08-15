@@ -28,6 +28,11 @@
       align-items: center;
       justify-content: space-between;
 
+      .mat-icon-button, img {
+        width: 100px;
+        height: 100px;
+      }
+
       button {
         color: var(--5elemstart-fore);
       }
@@ -69,6 +74,10 @@
       [vert] {
         display: flex;
         flex-flow: column;
+
+        div {
+          margin-top: 1em;
+        }
       }
     }
 

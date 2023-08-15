@@ -153,6 +153,15 @@ export class GlobalsService {
     this.saveSharedData();
   }
 
+  get animWiggleDuration(): number {
+    return this.cfgFiveElements.animWiggleDuration;
+  }
+
+  set animWiggleDuration(value: number) {
+    this.cfgFiveElements.animWiggleDuration = value;
+    this.saveSharedData();
+  }
+
   get animShowAnimation(): boolean {
     return this.cfgFiveElements.animShowAnimation;
   }

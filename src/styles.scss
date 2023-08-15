@@ -186,6 +186,18 @@ body {
   background-color: var(--5elemstart-toggle-bar-off);
 }
 
+.mat-slider.mat-accent .mat-slider-track-fill, .mat-slider.mat-accent .mat-slider-thumb, .mat-slider.mat-accent .mat-slider-thumb-label {
+  background-color: var(--5elemstart-toggle-on);
+}
+
+.mat-slider.mat-accent .mat-slider-thumb-label-text {
+  color: black;
+}
+
+.mat-slider-horizontal .mat-slider-ticks-container {
+  background-color: var(--5elemstart-toggle-on);
+}
+
 mat-icon[small] {
   display: flex;
   align-items: center;
