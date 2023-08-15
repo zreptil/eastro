@@ -1,6 +1,11 @@
 <div [style]="rootStyle" root>
   <!-- startpage -->
   <div *ngIf="globals.currElement==null" startPage>
+    <button (click)="globals.setCurrentPage('@elements')"
+            back
+            mat-icon-button>
+      <mat-icon>arrow_back</mat-icon>
+    </button>
     <div controls name>Die fünf Elemente</div>
     <div controls>
       <button (click)="activateElement($event, elem)"
@@ -8,25 +13,25 @@
         <img [src]="globals.imgForElement(elem, 'curr')" alt="element">
       </button>
     </div>
-    <div *ngIf="globals._timeoutHandle==null" controls>
+    <div *ngIf="globals._timeoutHandle==null" group>
       <ng-container *ngIf="globals._timeoutHandle==null">
-        <div>
-          <button (click)="globals.setCurrentPage('@elements')" mat-icon-button>
-            <mat-icon>arrow_back</mat-icon>
-          </button>
-        </div>
-        <div>
-          <button (click)="clickPlay($event)" mat-flat-button>
-            <mat-icon>play_arrow</mat-icon>
-            Abspielen
-          </button>
+        <div controls>
           <div>
-            <button (click)="globals.changeDuration($event)" *ngIf="globals._timeoutHandle==null" mat-flat-button>
-              {{globals.duration}}
+            <button (click)="clickPlay($event)" mat-flat-button>
+              <mat-icon>play_arrow</mat-icon>
+              Abspielen
             </button>
+            <div>
+              <button (click)="globals.changeDuration($event)" *ngIf="globals._timeoutHandle==null" mat-flat-button>
+                {{globals.durationText}}
+              </button>
+            </div>
           </div>
         </div>
-        <div></div>
+        <div vert>
+          <mat-slide-toggle [(ngModel)]="globals.animShowAnimation">Jahreszeit-Animationen</mat-slide-toggle>
+          <mat-slide-toggle [(ngModel)]="globals.animShowStatic" [disabled]="!globals.animShowAnimation">Jahreszeit-Bilder</mat-slide-toggle>
+        </div>
       </ng-container>
       <ng-container *ngIf="globals._timeoutHandle!=null">
         <button (click)="globals.clickStop($event)" mat-flat-button>
@@ -60,12 +65,17 @@
          elemView>
       <div elemPanel>
         <div elemLine>
-          <div name>{{globals.nameForElement(elem.id)}}</div>
           <div imgPanel>
             <img [src]="globals.imgForElement(elem.id, 'curr')"
                  alt="element"
                  current>
           </div>
+          <div imgPanel>
+            <img [src]="globals.imgForElement(elem.id, 'curr')"
+                 alt="element"
+                 current>
+          </div>
+          <div name>{{globals.nameForElement(elem.id)}}</div>
         </div>
         <div propPanel>
           <div props>

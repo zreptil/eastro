@@ -14,16 +14,30 @@
     height: 100%;
     color: white;
   }
+
+  ::ng-deep .sunrise {
+    // transform-origin: center center;
+    // font-size: 1em;
+    position: absolute;
+    // color: white;
+  }
 }
 
-[static] {
+.static, .staticMulti {
   position: absolute;
   display: flex;
   opacity: 0;
   flex-flow: column;
   align-items: center;
   justify-content: center;
+}
+
+.static {
   animation: fadeIn 5s ease-in-out 5s normal forwards;
+}
+
+.staticMulti {
+  animation: fadeIn 2s ease-in-out normal forwards;
 }
 
 [staticImage] {

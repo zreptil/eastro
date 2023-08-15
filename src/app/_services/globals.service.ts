@@ -11,6 +11,7 @@ import {EnvironmentService} from '@/_services/environment.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {ZodiacEventData} from '@/_model/zodiac-event-data';
 import {Router} from '@angular/router';
+import {FiveElementsData} from '@/_model/five-elements-data';
 
 class CustomTimeoutError extends Error {
   constructor() {
@@ -61,6 +62,7 @@ export class GlobalsService {
   nextElemStyle: string;
   viewElemStyle: string;
   currElement = '4';
+  cfgFiveElements: FiveElementsData;
   private flags = '';
 
   constructor(public http: HttpClient,
@@ -126,17 +128,38 @@ export class GlobalsService {
     return document.querySelector('head>title').innerHTML;
   }
 
-  _duration = 120000;
+  set duration(value: number) {
+    this.cfgFiveElements.animDuration = value;
+    this.saveSharedData();
+  }
 
-  get duration(): string {
-    let ret = `${this._duration / 1000} Sekunden`;
-    if (this._duration % 60000 === 0) {
-      ret = Utils.plural(this._duration / 60000, {
+  get durationText(): string {
+    let ret = `${this.cfgFiveElements.animDuration / 1000} Sekunden`;
+    if (this.cfgFiveElements.animDuration % 60000 === 0) {
+      ret = Utils.plural(this.cfgFiveElements.animDuration / 60000, {
         1: `1 Minute`,
-        other: `${this._duration / 60000} Minuten`
+        other: `${this.cfgFiveElements.animDuration / 60000} Minuten`
       });
     }
     return `${ret} pro Element`;
+  }
+
+  get animShowStatic(): boolean {
+    return this.cfgFiveElements.animShowStatic;
+  }
+
+  set animShowStatic(value: boolean) {
+    this.cfgFiveElements.animShowStatic = value;
+    this.saveSharedData();
+  }
+
+  get animShowAnimation(): boolean {
+    return this.cfgFiveElements.animShowAnimation;
+  }
+
+  set animShowAnimation(value: boolean) {
+    this.cfgFiveElements.animShowAnimation = value;
+    this.saveSharedData();
   }
 
   _timeLeft: string;
@@ -152,7 +175,7 @@ export class GlobalsService {
   clickPlay(evt: MouseEvent, onElemChange?: (elem: string) => void) {
     evt?.stopPropagation();
     if (evt != null) {
-      this._nextChange = new Date().getTime() + GLOBALS._duration;
+      this._nextChange = new Date().getTime() + this.cfgFiveElements.animDuration;
       this.progress = 0;
       this._timeLeft = '';
     }
@@ -162,14 +185,14 @@ export class GlobalsService {
   doStep(onElemChange?: (elem: string) => void) {
     const timeout = 900;
     const now = new Date().getTime();
-    this.progress = (1 - (this._nextChange - now - timeout) / GLOBALS._duration) * 100;
+    this.progress = (1 - (this._nextChange - now - timeout) / this.cfgFiveElements.animDuration) * 100;
     const left = Math.floor(Math.max(0, (this._nextChange - now) / 1000));
     const m = Math.floor(left / 60);
     const s = `${left % 60}`.padStart(2, '0');
     this._timeLeft = `${m}:${s}`;
     if (now >= this._nextChange) {
       this.activateNextElement(null, onElemChange);
-      this._nextChange = new Date().getTime() + GLOBALS._duration;
+      this._nextChange = new Date().getTime() + this.cfgFiveElements.animDuration;
       this.progress = 0;
     }
     this.clickPlay(null, onElemChange);
@@ -229,21 +252,21 @@ export class GlobalsService {
   changeDuration(evt: MouseEvent) {
     evt?.stopPropagation();
     const list = [10, 60, 90, 120, 300];
-    const idx = list.findIndex(l => l === GLOBALS._duration / 1000);
+    const idx = list.findIndex(l => l === this.cfgFiveElements.animDuration / 1000);
     if (idx < 0) {
-      GLOBALS._duration = list[0] * 1000;
+      this.duration = list[0] * 1000;
     } else {
-      GLOBALS._duration = list[idx >= list.length - 1 ? 0 : idx + 1] * 1000;
+      this.duration = list[idx >= list.length - 1 ? 0 : idx + 1] * 1000;
     }
   }
 
   getElement(element: string, idx: string): string {
-    const elem = GLOBALS.zodiacData?.elements?.[element];
+    const elem = this.zodiacData?.elements?.[element];
     return elem?.[idx] ?? element;
   }
 
   markedProp(element: string, value: string) {
-    const ret = GLOBALS.propsForElement(element)?.find(p => p.name === value);
+    const ret = this.propsForElement(element)?.find(p => p.name === value);
     if (ret != null) {
       const parts = ret.property.split(',');
       if (parts.length > 1) {
@@ -256,7 +279,7 @@ export class GlobalsService {
   imgForElement(baseElement: string, idx: string): string {
     let key = baseElement;
     if (idx !== 'curr') {
-      key = GLOBALS.zodiacData?.elements?.[baseElement]?.[idx] ?? baseElement;
+      key = this.zodiacData?.elements?.[baseElement]?.[idx] ?? baseElement;
     }
     return `assets/images/elements/clear/${key}.png`;
   }
@@ -287,6 +310,7 @@ export class GlobalsService {
 
     this.storageVersion = storage.s1;
     this.currentPage = storage.s2 ?? 'elements';
+    this.cfgFiveElements = FiveElementsData.fromJson(storage.s3 ?? {});
     // validate values
     if (this.svgCollection == null) {
       this.svgCollection = {};
@@ -316,7 +340,8 @@ export class GlobalsService {
     const storage: any = {
       s0: Date.now(),
       s1: this.version,
-      s2: this.currentPage
+      s2: this.currentPage,
+      s3: this.cfgFiveElements?.asJson
     };
     const data = JSON.stringify(storage);
     localStorage.setItem('sharedData', data);
@@ -447,9 +472,9 @@ export class GlobalsService {
   }
 
   styleForElement(idx: string, def: string, anim?: string): any {
-    const elem = GLOBALS.zodiacData?.elements?.[def];
+    const elem = this.zodiacData?.elements?.[def];
     let key = elem?.[idx] ?? def;
-    const prop = GLOBALS.propsForElement(key)?.find((p: any) => p.name === 'Farbe');
+    const prop = this.propsForElement(key)?.find((p: any) => p.name === 'Farbe');
     const color = this.colors[prop?.['property']] ?? {fill: 'initial', text: 'black'};
     const ret: any = {'--hand-fill': color.fill, '--fist-fill': color.fill, '--text': color.text};
     if (!Utils.isEmpty(anim)) {

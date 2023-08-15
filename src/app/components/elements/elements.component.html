@@ -27,31 +27,8 @@
     </div>
   </div>
   <div *ngSwitchCase="2">
-    <div controls>
-      <ng-container *ngIf="globals._timeoutHandle==null">
-        <button (click)="globals.clickPlay($event)" mat-flat-button>
-          <mat-icon>play_arrow</mat-icon>
-          Abspielen
-        </button>
-        <button (click)="globals.changeDuration($event)" *ngIf="globals._timeoutHandle==null" mat-flat-button>{{globals.duration}}</button>
-      </ng-container>
-      <ng-container *ngIf="globals._timeoutHandle!=null">
-        <button (click)="globals.clickStop($event)" mat-flat-button>
-          <mat-icon>stop</mat-icon>
-          Stop
-        </button>
-      </ng-container>
-    </div>
     <div videoframe>
       <div [style]="globals.viewElemStyle" elemview panel video>
-        <div [style]="globals.nextElemStyle" nextrel>
-          <img [src]="imgForElement('creates')" alt="next element" current>
-          <div name>{{globals.nameForElement(globals.nextElement)}}</div>
-          <div *ngFor="let prop of markProps" prop>
-            <div propName>{{globals.markedProp(globals.nextElement, prop).name}}</div>
-            <div propValue>{{globals.markedProp(globals.nextElement, prop).property}}</div>
-          </div>
-        </div>
         <div (click)="globals.toggleElemView()" [style]="globals.currElemStyle" elemrelvideo>
           <img (click)="globals.activateNextElement($event)" [src]="imgForElement('curr')" alt="current element" current>
           <div timeout>{{globals.timeLeft}}</div>

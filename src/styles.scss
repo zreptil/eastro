@@ -163,6 +163,27 @@ body {
 
   --5elemstart-back: black;
   --5elemstart-fore: silver;
+
+  --5elemstart-toggle-on: #a0a0ff;
+  --5elemstart-toggle-off: #d0d0ff;
+  --5elemstart-toggle-bar-on: rgba(160, 160, 255, 0.5);
+  --5elemstart-toggle-bar-off: rgba(255, 255, 255, 0.2);
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: var(--5elemstart-toggle-on);
+}
+
+.mat-slide-toggle-thumb {
+  background-color: var(--5elemstart-toggle-off);
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: var(--5elemstart-toggle-bar-on);
+}
+
+.mat-slide-toggle-bar {
+  background-color: var(--5elemstart-toggle-bar-off);
 }
 
 mat-icon[small] {
@@ -427,13 +448,32 @@ div[property-panel] {
 
 @keyframes sun {
   0% {
-    transform: translate(15%, 140%);
-  }
-  50% {
-    transform: translate(40%, 50%);
+    transform: translate(15%, 120vh) scale(0.5);
   }
   100% {
-    transform: translate(50%, -10%);
+    transform: translate(50%, 0) scale(1);
+  }
+}
+
+@keyframes sunrise {
+  0% {
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%) scale(0.2);
+  }
+  100% {
+    left: 50%;
+    top: -140px;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes sunwiggle {
+  0% {
+    transform: translateX(-50%) rotate(-45deg);
+  }
+  100% {
+    transform: translateX(-50%) rotate(45deg);
   }
 }
 

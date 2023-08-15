@@ -1,4 +1,6 @@
-<div [ngStyle]="anim?.static?.style ?? {display: 'none'}" static>
-  <img [ngStyle]="anim?.static?.styleImage" [src]="staticImage" alt="static image" staticImage>
-</div>
+<ng-container *ngFor="let a of animStatic">
+  <div [class]='staticClass(a)' [ngStyle]="a.style ?? {display: 'none'}">
+    <img [ngStyle]="a.styleImage" [src]="staticImage(a)" alt="static image" staticImage>
+  </div>
+</ng-container>
 <div [innerHTML]="animationString" class="anim"></div>

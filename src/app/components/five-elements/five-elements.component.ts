@@ -12,94 +12,156 @@ export class FiveElementsComponent {
 
   markProps: string[] = [];
   animId: string;
-  animDefs: AnimationData[] = [
-    {
-      id: 'Herbst',
-      class: 'flake',
-      img: 'fall',
-      count: 75,
-      animName: 'fall',
-      size: {min: 10, max: 210},
-      x: {min: -20, max: 100},
-      y: {min: -20, max: -80},
-      static: {
-        style: {
-          display: 'flex', left: '25%', bottom: '12%',
-          height: '100px',
-        },
-        styleImage: {
-          transformOrigin: '75px 5px',
-          animation: 'wiggle 4s ease-in-out infinite alternate'
-        }
-      }
-    },
-    {
-      id: 'Winter',
-      class: 'flake',
-      img: 'winter',
-      count: 75,
-      animName: 'fall',
-      size: {min: 10, max: 210},
-      x: {min: -20, max: 100},
-      y: {min: -20, max: -80},
-      static: {
-        style: {
-          display: 'flex', left: '60%', bottom: '10%',
-          height: '200px',
-        },
-        styleImage: {
-          transformOrigin: 'center 190px',
-          animation: 'wiggle 4s ease-in-out infinite alternate'
-        }
-      }
-    },
-    {
-      id: 'Frühling',
-      class: 'flake',
-      img: 'spring',
-      count: 75,
-      animName: 'raise',
-      size: {min: 10, max: 210},
-      x: {min: -20, max: 100},
-      y: {min: -20, max: -80},
-      static: {
-        style: {
-          display: 'flex', left: '25%', bottom: '10%',
-          height: '200px',
-        },
-        styleImage: {
-          transformOrigin: 'center 190px',
-          animation: 'wiggle 4s ease-in-out infinite alternate'
-        }
-      }
-    },
-    {
-      id: 'Sommer',
-      class: 'flake',
-      img: 'summer',
-      count: 1,
-      animName: 'sun',
-      size: {min: 500, max: 500},
-      x: {min: 5, max: 5},
-      y: {min: -20, max: -20},
-      static: {
-        style: {
-          display: 'flex', left: '55%', top: '10%',
-          height: '180px',
-          animation: 'fadeIn 5s ease-in-out 7s normal forwards'
-        },
-        styleImage: {
-          transformOrigin: 'center center',
-          animation: 'wiggle 4s ease-in-out infinite alternate'
-        }
-      }
-    },
-  ];
 
   constructor(public sanitizer: DomSanitizer) {
     GLOBALS.currElement = null;
     this.load();
     this.initSeason(GLOBALS.currElement);
+  }
+
+  _animDefs: AnimationData[] = [
+    {
+      id: 'Herbst',
+      animImg: 'fall',
+      def: {
+        class: 'flake',
+        count: 75,
+        animName: 'fall',
+        size: {min: 10, max: 210},
+        x: {min: -20, max: 100},
+        y: {min: -20, max: -80},
+      },
+      static: [{
+        style: {
+          display: 'flex',
+          left: '25%',
+          bottom: '12%',
+          height: '100px',
+        },
+        img: 'fall',
+        styleImage: {
+          transformOrigin: '75px 5px',
+          animation: 'wiggle 4s ease-in-out infinite alternate'
+        }
+      }, {
+        style: {
+          display: 'flex',
+          left: '75%',
+          bottom: '12%',
+          height: '100px',
+          transform: 'scaleX(-1) translateX(100%)'
+        },
+        img: 'fall',
+        styleImage: {
+          transformOrigin: '75px 5px',
+          animation: 'wiggle 4s ease-in-out infinite alternate'
+        }
+      }]
+    },
+    {
+      id: 'Winter',
+      animImg: 'winter',
+      def: {
+        class: 'flake',
+        count: 75,
+        animName: 'fall',
+        size: {min: 10, max: 210},
+        x: {min: -20, max: 100},
+        y: {min: -20, max: -80},
+      },
+      static: [{
+        style: {
+          display: 'flex', left: '25%', bottom: '10%',
+          height: '200px',
+        },
+        img: 'winter',
+        styleImage: {
+          transformOrigin: 'center 190px',
+          animation: 'wiggle 4s ease-in-out infinite alternate'
+        }
+      }, {
+        style: {
+          display: 'flex', left: '75%', bottom: '10%',
+          height: '200px',
+          transform: 'scaleX(-1) translateX(100%)'
+        },
+        img: 'winter',
+        styleImage: {
+          transformOrigin: 'center 190px',
+          animation: 'wiggle 4s ease-in-out infinite alternate'
+        }
+      }]
+    },
+    {
+      id: 'Frühling',
+      animImg: 'spring',
+      def: {
+        class: 'flake',
+        count: 75,
+        animName: 'raise',
+        size: {min: 10, max: 210},
+        x: {min: -20, max: 100},
+        y: {min: -20, max: -80},
+      },
+      static: [{
+        style: {
+          display: 'flex', left: '25%', bottom: '10%',
+          height: '200px',
+        },
+        img: 'spring',
+        styleImage: {
+          transformOrigin: 'center 190px',
+          animation: 'wiggle 4s ease-in-out infinite alternate'
+        }
+      }, {
+        style: {
+          display: 'flex', left: '75%', bottom: '10%',
+          height: '200px',
+          transform: 'scaleX(-1) translateX(100%)'
+        },
+        img: 'spring',
+        styleImage: {
+          transformOrigin: 'center 190px',
+          animation: 'wiggle 4s ease-in-out infinite alternate'
+        }
+      }]
+    },
+    {
+      id: 'Sommer',
+      animImg: 'summer',
+      static: [{
+        style: {
+          display: 'flex', left: '50%', top: '10.5%',
+          height: '110px',
+          transform: 'translateX(-50%)'
+        },
+        img: 'summer',
+        styleImage: {
+          // transformOrigin: 'center 190px',
+          animation: 'wiggle 4s ease-in-out infinite alternate'
+        }
+      }],
+      anim: {
+        animation: 'sunrise 5s ease-in-out normal forwards', //, sunwiggle 4s ease-in-out -2s infinite alternate',
+        height: '130px'
+      },
+    },
+  ];
+
+  get animDefs(): AnimationData[] {
+    const ret: AnimationData[] = [];
+    if (GLOBALS.cfgFiveElements.animShowAnimation) {
+      for (const anim of this._animDefs) {
+        const temp: any = {};
+        for (const key of Object.keys(anim)) {
+          if (GLOBALS.cfgFiveElements.animShowStatic || key !== 'static') {
+            temp[key] = (anim as any)[key];
+          }
+        }
+        ret.push(temp);
+      }
+    }
+    return ret;
   }
 
   get rootStyle(): string {

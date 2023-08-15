@@ -30,6 +30,9 @@ export class ElementsComponent {
   }
 
   get globals(): GlobalsService {
+    if (GLOBALS.currElement == null) {
+      GLOBALS.currElement = '4';
+    }
     return GLOBALS;
   }
 
