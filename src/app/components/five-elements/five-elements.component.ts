@@ -12,12 +12,15 @@ export class FiveElementsComponent {
 
   markProps: string[] = [];
   animId: string;
-  wiggle = `wiggle ${GLOBALS.cfgFiveElements.animWiggleDuration}s ease-in-out infinite alternate`;
 
   constructor(public sanitizer: DomSanitizer) {
     GLOBALS.currElement = null;
     this.load();
     this.initSeason(GLOBALS.currElement);
+  }
+
+  get wiggle(): string {
+    return `wiggle ${GLOBALS.cfgFiveElements.animWiggleDuration}s ease-in-out infinite alternate`;
   }
 
   _animDefs: AnimationData[] = [
