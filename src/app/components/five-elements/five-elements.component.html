@@ -1,6 +1,7 @@
+<div [innerHTML]="globals?.svgCollection"></div>
 <div [style]="rootStyle" root>
   <!-- startpage -->
-  <div *ngIf="globals.currElement==null" startPage>
+  <div *ngIf="globals.currElement==null && globals.elem5Page == null" startPage>
     <button (click)="globals.setCurrentPage('@elements')"
             back
             mat-icon-button>
@@ -22,8 +23,11 @@
               Abspielen
             </button>
             <div>
-              <button (click)="globals.changeDuration($event)" *ngIf="globals._timeoutHandle==null" mat-flat-button>
-                {{globals.durationText}}
+              <button (click)="globals.changeAnimDuration($event)" *ngIf="globals._timeoutHandle==null" mat-flat-button>
+                {{globals.durationText(globals.cfgFiveElements.animDuration)}} pro Element
+              </button>
+              <button (click)="globals.changePrologDuration($event)" *ngIf="globals._timeoutHandle==null" mat-flat-button>
+                {{globals.durationText(globals.cfgFiveElements.prologDuration) ?? 'Kein'}} Vorspann
               </button>
             </div>
           </div>
@@ -33,8 +37,8 @@
           <ng-container *ngIf="globals.animShowAnimation">
             <mat-slide-toggle [(ngModel)]="globals.animShowStatic">Jahreszeit-Bilder</mat-slide-toggle>
             <div>
-              <mat-slider [(value)]="globals.animWiggleDuration" [disabled]="!globals.animShowStatic || !globals.animShowAnimation" max="20" min="1" step="1" thumbLabel>
-              </mat-slider>
+              Wackeldauer
+              <mat-slider [(value)]="globals.animWiggleDuration" [disabled]="!globals.animShowStatic || !globals.animShowAnimation" max="20" min="1" step="1" thumbLabel></mat-slider>
               {{globals.animWiggleDuration}} Sekunden
             </div>
           </ng-container>
@@ -48,6 +52,20 @@
       </ng-container>
       <div *ngIf="globals._timeoutHandle!=null" progress>
         <mat-progress-bar [value]="globals.progress"></mat-progress-bar>
+      </div>
+    </div>
+  </div>
+  <!-- prolog -->
+  <div (click)="globals.elem5Page = null" *ngIf="globals.elem5Page === 'prolog'" prologPage>
+    <div [innerHTML]="prologText" [style]="animPrologText" row title></div>
+    <div *ngIf="animFootLeft != null" row>
+      <div feet>
+        <svg [style]="animFootLeft" left viewBox="7 9 22 59">
+          <use href="#foot-left"/>
+        </svg>
+        <svg [style]="animFootRight" right viewBox="38 0 22 59">
+          <use href="#foot-right"/>
+        </svg>
       </div>
     </div>
   </div>
@@ -65,7 +83,7 @@
     </div>
     <div (click)="clickElement($event)"
          *ngFor="let elem of [
-         {id: globals.nextElement, style: globals.nextElemStyle},
+          {id: globals.nextElement, style: globals.nextElemStyle},
           {id: globals.currElement, style: globals.currElemStyle}
          ]"
          [style]="globals.styleForElement(elem.id, elem.id, elem.style)"
@@ -93,8 +111,8 @@
           </div>
         </div>
       </div>
-      <div timeout>{{globals.timeLeft}}</div>
     </div>
     <app-animator [animDefs]="animDefs" [animId]="animId"></app-animator>
+    <div timeout>{{globals.timeLeft}}</div>
   </div>
 </div>

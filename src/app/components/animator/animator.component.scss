@@ -23,7 +23,7 @@
   }
 }
 
-.static, .staticMulti {
+.static, .staticMulti, .staticFade {
   position: absolute;
   display: flex;
   opacity: 0;
@@ -38,6 +38,10 @@
 
 .staticMulti {
   animation: fadeIn 2s ease-in-out normal forwards;
+}
+
+.staticFade {
+  animation: fadeOut 2s ease-in-out normal forwards;
 }
 
 [staticImage] {

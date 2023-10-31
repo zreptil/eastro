@@ -4,14 +4,59 @@
   background-color: var(--hand-fill);
   color: var(--text);
   width: 100vw;
-  height: 100vh;
+  height: var(--doc-height);
+
+  [prologPage] {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    height: var(--doc-height);
+    width: 100vw;
+    font-size: 3em;
+    font-weight: bold;
+    background-color: var(--prolog-back);
+    color: var(--prolog-fore);
+    background-image: url("/assets/images/prolog-back.png");
+    background-size: 700px;
+
+    [row] {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      width: 100%;
+    }
+
+    [row][title] {
+      flex-flow: column;
+    }
+
+    [feet] {
+      display: flex;
+
+      svg {
+        height: 128px;
+      }
+
+      [left] {
+        transform-origin: center 110px;
+        transform: translateX(-10px);
+      }
+
+      [right] {
+        transform-origin: center bottom;
+        transform: translateX(10px);
+      }
+    }
+  }
 
   [startPage] {
     display: flex;
     flex-flow: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: var(--doc-height);
     width: 100vw;
     background-color: var(--5elemstart-back);
     color: var(--5elemstart-fore);
@@ -186,18 +231,29 @@
 
       }
 
-      [timeout] {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 3em;
-      }
-
       cursor: pointer;
     }
+  }
+
+  [timeout] {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3em;
+
+    --c: #000;
+    color: white;
+    text-shadow: 2px 2px 0 var(--c),
+    2px -2px 0 var(--c),
+    -2px 2px 0 var(--c),
+    -2px -2px 0 var(--c),
+    2px 0px 0 var(--c),
+    0px 2px 0 var(--c),
+    -2px 0px 0 var(--c),
+    0px -2px 0 var(--c);
   }
 }

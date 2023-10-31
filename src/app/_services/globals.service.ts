@@ -61,7 +61,7 @@ export class GlobalsService {
   currElemStyle: string;
   nextElemStyle: string;
   viewElemStyle: string;
-  currElement = '4';
+  elem5Page: string = null;
   cfgFiveElements: FiveElementsData;
   private flags = '';
 
@@ -83,6 +83,16 @@ export class GlobalsService {
       //   this.currentPage = 'elements';
       // }
     });
+  }
+
+  _currElement = '4';
+
+  get currElement(): string {
+    return this._currElement;
+  }
+
+  set currElement(value: string) {
+    this._currElement = value;
   }
 
   _isDebug = false;
@@ -128,20 +138,14 @@ export class GlobalsService {
     return document.querySelector('head>title').innerHTML;
   }
 
-  set duration(value: number) {
+  set animDuration(value: number) {
     this.cfgFiveElements.animDuration = value;
     this.saveSharedData();
   }
 
-  get durationText(): string {
-    let ret = `${this.cfgFiveElements.animDuration / 1000} Sekunden`;
-    if (this.cfgFiveElements.animDuration % 60000 === 0) {
-      ret = Utils.plural(this.cfgFiveElements.animDuration / 60000, {
-        1: `1 Minute`,
-        other: `${this.cfgFiveElements.animDuration / 60000} Minuten`
-      });
-    }
-    return `${ret} pro Element`;
+  set prologDuration(value: number) {
+    this.cfgFiveElements.prologDuration = value;
+    this.saveSharedData();
   }
 
   get animShowStatic(): boolean {
@@ -181,9 +185,22 @@ export class GlobalsService {
     return this.getElement(this.currElement, 'creates');
   }
 
-  clickPlay(evt: MouseEvent, onElemChange?: (elem: string) => void) {
-    evt?.stopPropagation();
-    if (evt != null) {
+  durationText(duration: number): string {
+    if (duration === 0) {
+      return null;
+    }
+    let ret = `${duration / 1000} Sekunden`;
+    if (duration % 60000 === 0) {
+      ret = Utils.plural(duration / 60000, {
+        1: `1 Minute`,
+        other: `${duration / 60000} Minuten`
+      });
+    }
+    return ret;
+  }
+
+  clickPlay(doInit: boolean, onElemChange?: (elem: string) => void) {
+    if (doInit) {
       this._nextChange = new Date().getTime() + this.cfgFiveElements.animDuration;
       this.progress = 0;
       this._timeLeft = '';
@@ -192,6 +209,9 @@ export class GlobalsService {
   }
 
   doStep(onElemChange?: (elem: string) => void) {
+    if (this.elem5Page != null) {
+      return;
+    }
     const timeout = 900;
     const now = new Date().getTime();
     this.progress = (1 - (this._nextChange - now - timeout) / this.cfgFiveElements.animDuration) * 100;
@@ -204,7 +224,7 @@ export class GlobalsService {
       this._nextChange = new Date().getTime() + this.cfgFiveElements.animDuration;
       this.progress = 0;
     }
-    this.clickPlay(null, onElemChange);
+    this.clickPlay(false, onElemChange);
   }
 
   activateNextElement(evt: MouseEvent, onElemChange?: (elem: string) => void) {
@@ -224,6 +244,11 @@ export class GlobalsService {
   activate(idx: string, onElemChange?: (elem: string) => void) {
     const nextElement = this.getElement(this.currElement, idx);
     if (this.elemView === 2) {
+      if (+nextElement === 4) {
+        this.currElement = null;
+        onElemChange?.('prolog');
+        return;
+      }
       const duration = 2;
       this.currElemStyle = `fadeOut ${duration}s ease-in-out normal`;
       this.nextElemStyle = `fadeIn ${duration}s ease-in-out normal`;
@@ -258,14 +283,25 @@ export class GlobalsService {
     this._timeLeft = '';
   }
 
-  changeDuration(evt: MouseEvent) {
+  changeAnimDuration(evt: MouseEvent) {
     evt?.stopPropagation();
-    const list = [10, 60, 90, 120, 300];
+    const list = [5, 10, 60, 90, 120, 300];
     const idx = list.findIndex(l => l === this.cfgFiveElements.animDuration / 1000);
     if (idx < 0) {
-      this.duration = list[0] * 1000;
+      this.animDuration = list[0] * 1000;
     } else {
-      this.duration = list[idx >= list.length - 1 ? 0 : idx + 1] * 1000;
+      this.animDuration = list[idx >= list.length - 1 ? 0 : idx + 1] * 1000;
+    }
+  }
+
+  changePrologDuration(evt: MouseEvent) {
+    evt?.stopPropagation();
+    const list = [0, 10, 15, 20, 25, 30];
+    const idx = list.findIndex(l => l === this.cfgFiveElements.prologDuration / 1000);
+    if (idx < 0) {
+      this.prologDuration = list[0] * 1000;
+    } else {
+      this.prologDuration = list[idx >= list.length - 1 ? 0 : idx + 1] * 1000;
     }
   }
 

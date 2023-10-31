@@ -39,6 +39,7 @@ export class AnimationData {
 })
 export class AnimatorComponent {
   public animationString: SafeHtml;
+  fadeAnimStatic = false;
   private _nextHandle: number;
 
   constructor(public sanitizer: DomSanitizer) {
@@ -88,7 +89,9 @@ export class AnimatorComponent {
 
   staticClass(_a: StaticData): string[] {
     const ret: string[] = [];
-    if (this._animStatic != null) {
+    if (this.fadeAnimStatic) {
+      ret.push('staticFade');
+    } else if (this._animStatic != null) {
       ret.push('staticMulti');
     } else {
       ret.push('static');
@@ -120,6 +123,7 @@ export class AnimatorComponent {
     const temp: any[] = [];
     const src = this.anim;
     clearTimeout(this._nextHandle);
+    this.fadeAnimStatic = false;
     if (src != null) {
       this.addAnimations(src, temp);
     } else {
@@ -135,10 +139,14 @@ export class AnimatorComponent {
     if (idx >= this._animDefs.length) {
       idx = 0;
     }
-    this._animStatic = this._animDefs[idx]?.static;
-    idx++;
+    this.fadeAnimStatic = true;
     this._nextHandle = setTimeout(() => {
-      this.nextStatic(idx);
-    }, GLOBALS.cfgFiveElements.animDuration / this._animDefs.length);
+      this.fadeAnimStatic = false;
+      this._animStatic = this._animDefs[idx]?.static;
+      idx++;
+      this._nextHandle = setTimeout(() => {
+        this.nextStatic(idx);
+      }, GLOBALS.cfgFiveElements.animDuration / this._animDefs.length);
+    }, 2000);
   }
 }
