@@ -169,38 +169,11 @@ body {
   --5elemstart-toggle-off: #d0d0ff;
   --5elemstart-toggle-bar-on: rgba(160, 160, 255, 0.5);
   --5elemstart-toggle-bar-off: rgba(255, 255, 255, 0.2);
+  --5elemstart-toggle-icon-on: rgba(0, 0, 0, 0.7);
 
   --prolog-back: rgba(128, 0, 128, 1);
   --prolog-fore: rgba(0, 0, 0, 0.6);
   --foot-color: rgba(0, 0, 0, 0.6);
-}
-
-.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
-  background-color: var(--5elemstart-toggle-on);
-}
-
-.mat-slide-toggle-thumb {
-  background-color: var(--5elemstart-toggle-off);
-}
-
-.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
-  background-color: var(--5elemstart-toggle-bar-on);
-}
-
-.mat-slide-toggle-bar {
-  background-color: var(--5elemstart-toggle-bar-off);
-}
-
-.mat-slider.mat-accent .mat-slider-track-fill, .mat-slider.mat-accent .mat-slider-thumb, .mat-slider.mat-accent .mat-slider-thumb-label {
-  background-color: var(--5elemstart-toggle-on);
-}
-
-.mat-slider.mat-accent .mat-slider-thumb-label-text {
-  color: black;
-}
-
-.mat-slider-horizontal .mat-slider-ticks-container {
-  background-color: var(--5elemstart-toggle-on);
 }
 
 mat-icon[small] {
@@ -315,7 +288,7 @@ mat-icon[small] {
   color: var(--toolbarFore);
 }
 
-.mat-flat-button, .mat-fab, .mat-mini-fab {
+.mat-button, .mat-fab, .mat-mini-fab {
   background-color: transparent;
 }
 
@@ -325,7 +298,7 @@ mat-icon[small] {
   }
 }
 
-.mat-button, .mat-raised-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button, .mat-fab, .mat-mini-fab {
+.mat-button, .mat-raised-button, .mat-icon-button, .mat-stroked-button, .mat-button, .mat-fab, .mat-mini-fab {
   font-weight: normal;
 }
 
@@ -534,3 +507,95 @@ div[property-panel] {
     opacity: 0;
   }
 }
+
+.mat-mdc-slide-toggle.mat-accent {
+  --mdc-switch-selected-focus-state-layer-color: var(--5elemstart-toggle-on);
+  --mdc-switch-selected-handle-color: var(--5elemstart-toggle-on);
+  --mdc-switch-selected-hover-state-layer-color: var(--5elemstart-toggle-on);
+  --mdc-switch-selected-pressed-state-layer-color: var(--5elemstart-toggle-on);
+  --mdc-switch-selected-focus-handle-color: var(--5elemstart-toggle-bar-off);
+  --mdc-switch-selected-hover-handle-color: var(--5elemstart-toggle-bar-off);
+  --mdc-switch-selected-pressed-handle-color: var(--5elemstart-toggle-bar-off);
+  --mdc-switch-selected-focus-track-color: var(--5elemstart-toggle-bar-on);
+  --mdc-switch-selected-hover-track-color: var(--5elemstart-toggle-bar-on);
+  --mdc-switch-selected-pressed-track-color: var(--5elemstart-toggle-bar-on);
+  --mdc-switch-selected-track-color: var(--5elemstart-toggle-bar-on);
+  --mdc-switch-selected-icon-color: var(--5elemstart-toggle-icon-on);
+}
+
+.mat-mdc-slide-toggle {
+  --mdc-switch-selected-focus-state-layer-color: var(--5elemstart-toggle-on);
+  --mdc-switch-selected-handle-color: var(--5elemstart-toggle-on);
+  --mdc-switch-selected-hover-state-layer-color: var(--5elemstart-toggle-on);
+  --mdc-switch-selected-pressed-state-layer-color: var(--5elemstart-toggle-on);
+  --mdc-switch-selected-focus-handle-color: var(--5elemstart-toggle-on);
+  --mdc-switch-selected-hover-handle-color: var(--5elemstart-toggle-on);
+  --mdc-switch-selected-pressed-handle-color: var(--5elemstart-toggle-on);
+  --mdc-switch-selected-focus-track-color: var(--5elemstart-toggle-on);
+  --mdc-switch-selected-hover-track-color: var(--5elemstart-toggle-on);
+  --mdc-switch-selected-pressed-track-color: var(--5elemstart-toggle-on);
+  --mdc-switch-selected-track-color: var(--5elemstart-toggle-on);
+  --mdc-switch-disabled-selected-handle-color: var(--5elemstart-toggle-on);
+  --mdc-switch-disabled-selected-icon-color: var(--5elemstart-toggle-on);
+  --mdc-switch-disabled-selected-track-color: var(--5elemstart-toggle-on);
+  --mdc-switch-disabled-unselected-handle-color: var(--5elemstart-toggle-on);
+  --mdc-switch-disabled-unselected-icon-color: var(--5elemstart-toggle-on);
+  --mdc-switch-disabled-unselected-track-color: var(--5elemstart-toggle-on);
+  --mdc-switch-handle-surface-color: var(--mdc-theme-surface, #fff);
+  --mdc-switch-handle-elevation-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  --mdc-switch-handle-shadow-color: black;
+  --mdc-switch-disabled-handle-elevation-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12);
+  --mdc-switch-selected-icon-color: #fff;
+  --mdc-switch-unselected-focus-handle-color: #212121;
+  --mdc-switch-unselected-focus-state-layer-color: #424242;
+  --mdc-switch-unselected-focus-track-color: #e0e0e0;
+  --mdc-switch-unselected-handle-color: #616161;
+  --mdc-switch-unselected-hover-handle-color: #212121;
+  --mdc-switch-unselected-hover-state-layer-color: #424242;
+  --mdc-switch-unselected-hover-track-color: #e0e0e0;
+  --mdc-switch-unselected-icon-color: #fff;
+  --mdc-switch-unselected-pressed-handle-color: #212121;
+  --mdc-switch-unselected-pressed-state-layer-color: #424242;
+  --mdc-switch-unselected-pressed-track-color: #e0e0e0;
+  --mdc-switch-unselected-track-color: #e0e0e0;
+}
+
+.mat-mdc-slider {
+  --mdc-slider-label-container-color: black;
+  --mdc-slider-label-label-text-color: white;
+  --mdc-slider-disabled-handle-color: var(--5elemstart-toggle-off);
+  --mdc-slider-disabled-active-track-color: var(--5elemstart-toggle-on);
+  --mdc-slider-disabled-inactive-track-color: var(--5elemstart-toggle-off);
+  --mdc-slider-with-tick-marks-disabled-container-color: #000;
+  --mat-mdc-slider-value-indicator-opacity: 0.6;
+}
+
+/*
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: var(--5elemstart-toggle-on);
+}
+
+.mat-slide-toggle-thumb {
+  background-color: var(--5elemstart-toggle-off);
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: var(--5elemstart-toggle-bar-on);
+}
+
+.mat-slide-toggle-bar {
+  background-color: var(--5elemstart-toggle-bar-off);
+}
+
+.mat-slider.mat-accent .mat-slider-track-fill, .mat-slider.mat-accent .mat-slider-thumb, .mat-slider.mat-accent .mat-slider-thumb-label {
+  background-color: var(--5elemstart-toggle-on);
+}
+
+.mat-slider.mat-accent .mat-slider-thumb-label-text {
+  color: black;
+}
+
+.mat-slider-horizontal .mat-slider-ticks-container {
+  background-color: var(--5elemstart-toggle-on);
+}
+*/

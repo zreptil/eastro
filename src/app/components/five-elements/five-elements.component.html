@@ -10,7 +10,8 @@
     <div controls name>Die fünf Elemente</div>
     <div controls>
       <button (click)="activateElement($event, elem)"
-              *ngFor="let elem of ['4', '5', '1', '2', '3']" mat-icon-button>
+              *ngFor="let elem of ['4', '5', '1', '2', '3']"
+              mat-button>
         <img [src]="globals.imgForElement(elem, 'curr')" alt="element">
       </button>
     </div>
@@ -18,16 +19,20 @@
       <ng-container *ngIf="globals._timeoutHandle==null">
         <div controls>
           <div>
-            <button (click)="clickPlay($event)" mat-flat-button>
+            <button (click)="clickPlay($event)" mat-button>
               <mat-icon>play_arrow</mat-icon>
               Abspielen
             </button>
             <div>
-              <button (click)="globals.changeAnimDuration($event)" *ngIf="globals._timeoutHandle==null" mat-flat-button>
-                {{globals.durationText(globals.cfgFiveElements.animDuration)}} pro Element
+              <button (click)="globals.changeAnimDuration($event)"
+                      *ngIf="globals._timeoutHandle==null"
+                      mat-button>
+                {{ globals.durationText(globals.cfgFiveElements.animDuration) }} pro Element
               </button>
-              <button (click)="globals.changePrologDuration($event)" *ngIf="globals._timeoutHandle==null" mat-flat-button>
-                {{globals.durationText(globals.cfgFiveElements.prologDuration) ?? 'Kein'}} Vorspann
+              <button (click)="globals.changePrologDuration($event)"
+                      *ngIf="globals._timeoutHandle==null"
+                      mat-button>
+                {{ globals.durationText(globals.cfgFiveElements.prologDuration) ?? 'Kein' }} Vorspann
               </button>
             </div>
           </div>
@@ -38,14 +43,20 @@
             <mat-slide-toggle [(ngModel)]="globals.animShowStatic">Jahreszeit-Bilder</mat-slide-toggle>
             <div>
               Wackeldauer
-              <mat-slider [(value)]="globals.animWiggleDuration" [disabled]="!globals.animShowStatic || !globals.animShowAnimation" max="20" min="1" step="1" thumbLabel></mat-slider>
-              {{globals.animWiggleDuration}} Sekunden
+              <mat-slider [disabled]="!globals.animShowStatic || !globals.animShowAnimation"
+                          max="20"
+                          min="1"
+                          step="1">
+                <input [(ngModel)]="globals.animWiggleDuration"
+                       matSliderThumb>
+              </mat-slider>
+              {{ globals.animWiggleDuration }} Sekunden
             </div>
           </ng-container>
         </div>
       </ng-container>
       <ng-container *ngIf="globals._timeoutHandle!=null">
-        <button (click)="globals.clickStop($event)" mat-flat-button>
+        <button (click)="globals.clickStop($event)" mat-button>
           <mat-icon>stop</mat-icon>
           Stop
         </button>
@@ -59,7 +70,7 @@
   <div (click)="globals.elem5Page = null" *ngIf="globals.elem5Page === 'prolog'" prologPage>
     <div [innerHTML]="prologText" [style]="animPrologText" row title></div>
     <div *ngIf="animFootLeft != null" row>
-      <div feet>
+      <div [style]="animFoot" feet>
         <svg [style]="animFootLeft" left viewBox="7 9 22 59">
           <use href="#foot-left"/>
         </svg>
@@ -100,19 +111,19 @@
                  alt="element"
                  current>
           </div>
-          <div name>{{globals.nameForElement(elem.id)}}</div>
+          <div name>{{ globals.nameForElement(elem.id) }}</div>
         </div>
         <div propPanel>
           <div props>
             <div *ngFor="let prop of markProps" prop>
-              <div propName>{{globals.markedProp(elem.id, prop).name}}</div>
-              <div propValue>{{globals.markedProp(elem.id, prop).property}}</div>
+              <div propName>{{ globals.markedProp(elem.id, prop).name }}</div>
+              <div propValue>{{ globals.markedProp(elem.id, prop).property }}</div>
             </div>
           </div>
         </div>
       </div>
     </div>
     <app-animator [animDefs]="animDefs" [animId]="animId"></app-animator>
-    <div timeout>{{globals.timeLeft}}</div>
+    <div class="e{{globals.currElement}}" timeout>{{ globals.timeLeft }}</div>
   </div>
 </div>

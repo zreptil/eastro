@@ -285,7 +285,7 @@ export class GlobalsService {
 
   changeAnimDuration(evt: MouseEvent) {
     evt?.stopPropagation();
-    const list = [5, 10, 60, 90, 120, 300];
+    const list = [5, 10, 20, 60, 90, 120, 300];
     const idx = list.findIndex(l => l === this.cfgFiveElements.animDuration / 1000);
     if (idx < 0) {
       this.animDuration = list[0] * 1000;

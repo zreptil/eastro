@@ -13,6 +13,7 @@ export class FiveElementsComponent {
 
   markProps: string[] = [];
   animId: string;
+  footDist = 40;
   animFootLeft: any = null;
   animFootRight: any = null;
   animPrologText: any = null;
@@ -23,6 +24,10 @@ export class FiveElementsComponent {
     GLOBALS.currElement = null;
     this.load();
     this.initSeason(GLOBALS.currElement);
+  }
+
+  get animFoot(): any {
+    return {'--footDist': `${this.footDist ?? 40}px`};
   }
 
   __animDefs: AnimationData[];
@@ -181,7 +186,7 @@ export class FiveElementsComponent {
           style: {
             display: 'flex', left: '50%', top: '50%',
             height: '180px',
-            transform: 'translate(-50%,-50%)'
+            transform: 'translate(-50%,-32%)'
           },
           img: 'summer',
           styleImage: {
@@ -289,22 +294,21 @@ export class FiveElementsComponent {
       return;
     }
     const stepLength = 130;
-    const footDist = 10;
     switch (type) {
       case 'right':
         this.prologText = 'Bogenschritt rechts';
-        this.animFootLeft = {animation: `footBack ${time}ms ease-in-out 1s forwards`, '--x': `-${footDist}px`, '--d': '-40deg'};
+        this.animFootLeft = {animation: `footBack ${time}ms ease-in-out 1s forwards`, '--x': `-${this.footDist}px`, '--d': '-40deg'};
         this.animFootRight = {
           animation: `footFront ${time}ms ease-in-out 1s forwards`,
-          '--x': `${footDist}px`,
+          '--x': `${this.footDist}px`,
           '--y': `-${stepLength}px`
         };
         this.animPrologText = {animation: `footText ${time}ms ease-in-out 1s forwards`};
         break;
       case 'left':
         this.prologText = 'Bogenschritt links';
-        this.animFootRight = {animation: `footBack ${time}ms ease-in-out 1s forwards`, '--x': `${footDist}px`, '--d': '40deg'};
-        this.animFootLeft = {animation: `footFront ${time}ms ease-in-out 1s forwards`, '--x': `-${footDist}px`, '--y': `-${stepLength}px`};
+        this.animFootRight = {animation: `footBack ${time}ms ease-in-out 1s forwards`, '--x': `${this.footDist}px`, '--d': '40deg'};
+        this.animFootLeft = {animation: `footFront ${time}ms ease-in-out 1s forwards`, '--x': `-${this.footDist}px`, '--y': `-${stepLength}px`};
         this.animPrologText = {animation: `footText ${time}ms ease-in-out 1s forwards`};
         break;
     }

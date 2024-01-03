@@ -11,7 +11,7 @@
       </button>
       <button (click)="globals.setCurrentPage(btn.page)"
               *ngFor="let btn of toolbarButtons"
-              [class]="classForToolbarbutton(btn)" mat-flat-button>
+              [class]="classForToolbarbutton(btn)" mat-button>
         {{btn.label}}
       </button>
       <!--
