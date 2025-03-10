@@ -6,8 +6,9 @@ import {Utils} from '@/classes/utils';
 import {ColorDialogData} from '@/controls/color-picker/color-picker.component';
 
 @Component({
-  templateUrl: './color-picker-dialog.html',
-  styleUrls: ['./color-picker-dialog.scss']
+    templateUrl: './color-picker-dialog.html',
+    styleUrls: ['./color-picker-dialog.scss'],
+    standalone: false
 })
 export class ColorPickerDialog {
   static modeList = ['mixer', 'image', 'rgb'];

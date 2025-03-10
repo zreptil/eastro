@@ -12,7 +12,7 @@ import {ColorPickerRGBComponent} from '@/controls/color-picker/color-picker-rgb/
 import {WelcomeComponent} from '@/components/welcome/welcome.component';
 import {MainComponent} from '@/components/main/main.component';
 import {FormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {MaterialModule} from '@/material.module';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {LogComponent} from '@/components/log/log.component';
@@ -26,38 +26,31 @@ import {AppRoutingModule} from '@/app-routing.module';
 import { FiveElementsComponent } from './components/five-elements/five-elements.component';
 import { AnimatorComponent } from './components/animator/animator.component';
 
-@NgModule({
-  declarations: [
-    AutofocusDirective,
-    AppComponent,
-    DialogComponent,
-    ColorPickerComponent,
-    ColorPickerDialog,
-    ColorPickerImageComponent,
-    ColorPickerMixerComponent,
-    ColorPickerBaseComponent,
-    ColorPickerRGBComponent,
-    WhatsNewComponent,
-    MainComponent,
-    WelcomeComponent,
-    ImpressumComponent,
-    ElementsComponent,
-    AnimalsComponent,
-    FiveElementsComponent,
-    AnimatorComponent,
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    MaterialModule,
-    HttpClientModule,
-    DragDropModule,
-    LogComponent,
-    ProgressComponent,
-    AppRoutingModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AutofocusDirective,
+        AppComponent,
+        DialogComponent,
+        ColorPickerComponent,
+        ColorPickerDialog,
+        ColorPickerImageComponent,
+        ColorPickerMixerComponent,
+        ColorPickerBaseComponent,
+        ColorPickerRGBComponent,
+        WhatsNewComponent,
+        MainComponent,
+        WelcomeComponent,
+        ImpressumComponent,
+        ElementsComponent,
+        AnimalsComponent,
+        FiveElementsComponent,
+        AnimatorComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        FormsModule,
+        MaterialModule,
+        DragDropModule,
+        LogComponent,
+        ProgressComponent,
+        AppRoutingModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {
 }

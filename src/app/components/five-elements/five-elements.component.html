@@ -1,129 +1,145 @@
 <div [innerHTML]="globals?.svgCollection"></div>
-<div [style]="rootStyle" root>
+<div [style]="styleForRoot" root>
   <!-- startpage -->
-  <div *ngIf="globals.currElement==null && globals.elem5Page == null" startPage>
-    <button (click)="globals.setCurrentPage('@elements')"
-            back
-            mat-icon-button>
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-    <div controls name>Die fünf Elemente</div>
-    <div controls>
-      <button (click)="activateElement($event, elem)"
-              *ngFor="let elem of ['4', '5', '1', '2', '3']"
-              mat-button>
-        <img [src]="globals.imgForElement(elem, 'curr')" alt="element">
-      </button>
-    </div>
-    <div *ngIf="globals._timeoutHandle==null" group>
-      <ng-container *ngIf="globals._timeoutHandle==null">
-        <div controls>
-          <div>
-            <button (click)="clickPlay($event)" mat-button>
-              <mat-icon>play_arrow</mat-icon>
-              Abspielen
-            </button>
-            <div>
-              <button (click)="globals.changeAnimDuration($event)"
-                      *ngIf="globals._timeoutHandle==null"
-                      mat-button>
-                {{ globals.durationText(globals.cfgFiveElements.animDuration) }} pro Element
-              </button>
-              <button (click)="globals.changePrologDuration($event)"
-                      *ngIf="globals._timeoutHandle==null"
-                      mat-button>
-                {{ globals.durationText(globals.cfgFiveElements.prologDuration) ?? 'Kein' }} Vorspann
-              </button>
-            </div>
-          </div>
-        </div>
-        <div vert>
-          <mat-slide-toggle [(ngModel)]="globals.animShowAnimation">Jahreszeit-Animationen</mat-slide-toggle>
-          <ng-container *ngIf="globals.animShowAnimation">
-            <mat-slide-toggle [(ngModel)]="globals.animShowStatic">Jahreszeit-Bilder</mat-slide-toggle>
-            <div>
-              Wackeldauer
-              <mat-slider [disabled]="!globals.animShowStatic || !globals.animShowAnimation"
-                          max="20"
-                          min="1"
-                          step="1">
-                <input [(ngModel)]="globals.animWiggleDuration"
-                       matSliderThumb>
-              </mat-slider>
-              {{ globals.animWiggleDuration }} Sekunden
-            </div>
-          </ng-container>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="globals._timeoutHandle!=null">
-        <button (click)="globals.clickStop($event)" mat-button>
-          <mat-icon>stop</mat-icon>
-          Stop
-        </button>
-      </ng-container>
-      <div *ngIf="globals._timeoutHandle!=null" progress>
-        <mat-progress-bar [value]="globals.progress"></mat-progress-bar>
-      </div>
-    </div>
-  </div>
-  <!-- prolog -->
-  <div (click)="globals.elem5Page = null" *ngIf="globals.elem5Page === 'prolog'" prologPage>
-    <div [innerHTML]="prologText" [style]="animPrologText" row title></div>
-    <div *ngIf="animFootLeft != null" row>
-      <div [style]="animFoot" feet>
-        <svg [style]="animFootLeft" left viewBox="7 9 22 59">
-          <use href="#foot-left"/>
-        </svg>
-        <svg [style]="animFootRight" right viewBox="38 0 22 59">
-          <use href="#foot-right"/>
-        </svg>
-      </div>
-    </div>
-  </div>
-  <!-- element -->
-  <div (click)="globals.clickStop($event)"
-       *ngIf="globals.currElement!=null"
-       [style]="globals.viewElemStyle" elements>
-    <div controls>
-      <button (click)="globals.clickStop($event)" mat-icon-button>
+  @if (globals.currElement == null && globals.elem5Page == null) {
+    <div startPage>
+      <button (click)="globals.setCurrentPage('@elements')"
+              back
+              mat-icon-button>
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <button (click)="clickReplay($event)" mat-icon-button>
-        <mat-icon>play_circle</mat-icon>
-      </button>
-    </div>
-    <div (click)="clickElement($event)"
-         *ngFor="let elem of [
-          {id: globals.nextElement, style: globals.nextElemStyle},
-          {id: globals.currElement, style: globals.currElemStyle}
-         ]"
-         [style]="globals.styleForElement(elem.id, elem.id, elem.style)"
-         elemView>
-      <div elemPanel>
-        <div elemLine>
-          <div imgPanel>
-            <img [src]="globals.imgForElement(elem.id, 'curr')"
-                 alt="element"
-                 current>
-          </div>
-          <div imgPanel>
-            <img [src]="globals.imgForElement(elem.id, 'curr')"
-                 alt="element"
-                 current>
-          </div>
-          <div name>{{ globals.nameForElement(elem.id) }}</div>
-        </div>
-        <div propPanel>
-          <div props>
-            <div *ngFor="let prop of markProps" prop>
-              <div propName>{{ globals.markedProp(elem.id, prop).name }}</div>
-              <div propValue>{{ globals.markedProp(elem.id, prop).property }}</div>
+      <div controls name>Die fünf Elemente</div>
+      <div controls>
+        <button (click)="activateElement($event, elem)"
+                *ngFor="let elem of ['4', '5', '1', '2', '3']"
+                mat-button>
+          <img [src]="globals.imgForElement(elem, 'curr', false)" alt="element">
+        </button>
+      </div>
+      @if (globals._timeoutHandle == null) {
+        <div group>
+          @if (globals._timeoutHandle == null) {
+            <div controls>
+              <div>
+                <button (click)="clickPlay($event)" mat-button>
+                  <mat-icon>play_arrow</mat-icon>
+                  Abspielen
+                </button>
+                <div>
+                  @if (globals._timeoutHandle == null) {
+                    <button (click)="globals.changeAnimDuration($event)"
+                            mat-button>
+                      {{ globals.durationText(globals.cfgFiveElements.animDuration) }} pro Element
+                    </button>
+                    <button (click)="globals.changePrologDuration($event)"
+                            mat-button>
+                      {{ globals.durationText(globals.cfgFiveElements.prologDuration) ?? 'Kein' }} Vorspann
+                    </button>
+                  }
+                </div>
+              </div>
             </div>
-          </div>
+            <div vert>
+              <mat-slide-toggle [(ngModel)]="globals.animShowAnimation">Jahreszeit-Animationen</mat-slide-toggle>
+              <ng-container *ngIf="globals.animShowAnimation">
+                <mat-slide-toggle [(ngModel)]="globals.animShowStatic">Jahreszeit-Bilder</mat-slide-toggle>
+                <div>
+                  Wackeldauer
+                  <mat-slider [disabled]="!globals.animShowStatic || !globals.animShowAnimation"
+                              max="20"
+                              min="1"
+                              step="1">
+                    <input [(ngModel)]="globals.animWiggleDuration"
+                           matSliderThumb>
+                  </mat-slider>
+                  {{ globals.animWiggleDuration }} Sekunden
+                </div>
+              </ng-container>
+              <mat-slide-toggle [(ngModel)]="globals.animShowQuiz">Quiz-Animationen</mat-slide-toggle>
+            </div>
+          } @else {
+            <button (click)="globals.clickStop($event)" mat-button>
+              <mat-icon>stop</mat-icon>
+              Stop
+            </button>
+          }
+          @if (globals._timeoutHandle != null) {
+            <div progress>
+              <mat-progress-bar [value]="globals.progress"></mat-progress-bar>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+  <!-- prolog -->
+  @if (globals.elem5Page === 'prolog') {
+    <div (click)="globals.elem5Page = null" prologPage>
+      <div [innerHTML]="prologText" [style]="animPrologText" row title></div>
+      <div *ngIf="animFootLeft != null" row>
+        <div [style]="animFoot" feet>
+          <svg [style]="animFootLeft" left viewBox="7 9 22 59">
+            <use href="#foot-left"/>
+          </svg>
+          <svg [style]="animFootRight" right viewBox="38 0 22 59">
+            <use href="#foot-right"/>
+          </svg>
         </div>
       </div>
     </div>
-    <app-animator [animDefs]="animDefs" [animId]="animId"></app-animator>
-    <div class="e{{globals.currElement}}" timeout>{{ globals.timeLeft }}</div>
-  </div>
+  }
+  <!-- element -->
+  @if (globals.currElement != null) {
+    <div (click)="globals.clickStop($event)"
+         [style]="globals.viewElemStyle" elements>
+      <div controls>
+        <button (click)="globals.clickStop($event)" mat-icon-button>
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <button (click)="clickReplay($event)" mat-icon-button>
+          <mat-icon>play_circle</mat-icon>
+        </button>
+      </div>
+      @for (elem of [
+        {id: globals.nextElement, style: globals.nextElemAnim},
+        {id: globals.currElement, style: globals.currElemAnim}
+      ]; track $index) {
+        <div (click)="clickElement($event)"
+             [style]="globals.styleForElement(elem.id, elem.id, elem.style)"
+             [class]="classForElement(elem.id)"
+             elemView>
+          <div elemPanel>
+            <div elemLine>
+              <div imgPanel>
+                <img [src]="globals.imgForElement(elem.id, 'curr')"
+                     [class]="classForImage(elem.id)"
+                     alt="element"
+                     current>
+              </div>
+              <div imgPanel>
+                <img [src]="globals.imgForElement(elem.id, 'curr')"
+                     [class]="classForImage(elem.id)"
+                     alt="element"
+                     current>
+              </div>
+              <div name>{{ globals.nameForElement(elem.id) }}</div>
+            </div>
+            <div propPanel>
+              <div props>
+                @for (prop of globals.markProps; track $index) {
+                  <div prop [class]="classForProp($index)">
+                    <div propName>{{ globals.markedProp(elem.id, $index, prop, true).name }}</div>
+                    <div propValue [innerHtml]="globals.markedProp(elem.id, $index, prop, !elem.style?.startsWith('fadeOut')).property"></div>
+                    <div propQuiz [style]="styleForQuiz($index)">{{ globals.markedProp(elem.id, $index, prop, true).quiz }}</div>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+      <app-animator [animDefs]="animDefs" [animId]="globals.animId"></app-animator>
+      <div class="e{{globals.currElement}}" timeout>{{ globals.timeLeft }}</div>
+    </div>
+  }
 </div>

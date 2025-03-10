@@ -7,13 +7,10 @@ import {Utils} from '@/classes/utils';
 @Component({
   selector: 'app-elements',
   templateUrl: './elements.component.html',
-  styleUrls: ['./elements.component.scss']
+  styleUrls: ['./elements.component.scss'],
+  standalone: false
 })
 export class ElementsComponent {
-
-  currAnimal = '';
-  markProps: string[] = [];
-  currDate = Date.now();
 
   constructor() {
     this.load();
@@ -39,14 +36,14 @@ export class ElementsComponent {
   load(): void {
     try {
       const data = JSON.parse(localStorage.getItem('elemProps'));
-      this.markProps = data.m;
+      GLOBALS.markProps = data.m;
     } catch (ex) {
     }
   }
 
   save(): void {
     const data = {
-      m: this.markProps
+      m: GLOBALS.markProps
     };
     localStorage.setItem('elemProps', JSON.stringify(data));
   }
@@ -115,22 +112,22 @@ export class ElementsComponent {
   }
 
   imgForElement(idx: string): string {
-    return GLOBALS.imgForElement(GLOBALS.currElement, idx);
+    return GLOBALS.imgForElement(GLOBALS.currElement, idx, false);
   }
 
   activateProp(prop: any) {
-    const idx = this.markProps.indexOf(prop.name);
+    const idx = GLOBALS.markProps.indexOf(prop.name);
     if (idx >= 0) {
-      this.markProps.splice(idx, 1);
+      GLOBALS.markProps.splice(idx, 1);
     } else {
-      this.markProps.push(prop.name);
+      GLOBALS.markProps.push(prop.name);
     }
     this.save();
   }
 
   classForProp(prop: any): string[] {
     const ret: string[] = [];
-    if (this.markProps.indexOf(prop.name) >= 0) {
+    if (GLOBALS.markProps.indexOf(prop.name) >= 0) {
       ret.push('current');
     }
     return ret;

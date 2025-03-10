@@ -1,18 +1,16 @@
 import {Component} from '@angular/core';
 import {GLOBALS, GlobalsService} from '@/_services/globals.service';
-import {DomSanitizer} from '@angular/platform-browser';
 import {AnimationData} from '@/components/animator/animator.component';
 import {Utils} from '@/classes/utils';
 
 @Component({
   selector: 'app-five-elements',
   templateUrl: './five-elements.component.html',
-  styleUrls: ['./five-elements.component.scss']
+  styleUrls: ['./five-elements.component.scss'],
+  standalone: false
 })
 export class FiveElementsComponent {
 
-  markProps: string[] = [];
-  animId: string;
   footDist = 40;
   animFootLeft: any = null;
   animFootRight: any = null;
@@ -20,7 +18,7 @@ export class FiveElementsComponent {
   prologText: string;
   lastPrologType: string;
 
-  constructor(public sanitizer: DomSanitizer) {
+  constructor() {
     GLOBALS.currElement = null;
     this.load();
     this.initSeason(GLOBALS.currElement);
@@ -205,11 +203,17 @@ export class FiveElementsComponent {
     return this.__animDefs;
   }
 
-  get rootStyle(): string {
+  get styleForRoot(): any {
     if (GLOBALS.currElement == null) {
-      return '';
+      return {};
     }
-    return GLOBALS.styleForElement(GLOBALS.currElement, GLOBALS.currElement);
+    const ret: any = GLOBALS.styleForElement(GLOBALS.currElement, GLOBALS.currElement);
+    if (GLOBALS.animShowQuiz) {
+      if (GLOBALS._quizIdx === GLOBALS.markProps.findIndex(p => p === 'Farbe') + 1) {
+        ret.animation = 'fadeColor 2s ease-in-out forwards';
+      }
+    }
+    return ret;
   }
 
   get globals(): GlobalsService {
@@ -238,25 +242,29 @@ export class FiveElementsComponent {
     this.initSeason(id);
   }
 
-  initSeason(elem: string, timeout = 750): void {
+  initSeason(elem: string): void {
     if (elem === 'prolog') {
       this.initPlay(Utils.nextListItem(this.lastPrologType, ['left', 'right', 'end']));
       return;
     }
     this.fillAnimDefs();
+    GLOBALS.seasonAnimationTimeout = 0;//timeout;
     if (elem == null) {
-      this.animId = 'none';
+      GLOBALS.animId = 'none';
     } else {
-      setTimeout(() => {
-        this.animId = GLOBALS.propsForElement(elem)?.find(p => p.name === 'Jahreszeit')?.property;
-      }, timeout);
+      if (GLOBALS.animShowQuiz) {
+        GLOBALS._quizIdx = 0;
+        GLOBALS.seasonAnimationTimeout = 0;
+      } else {
+        GLOBALS.initSeasonAnimation(elem);
+      }
     }
   }
 
   load(): void {
     try {
       const data = JSON.parse(localStorage.getItem('elemProps'));
-      this.markProps = data.m;
+      GLOBALS.markProps = data.m;
     } catch (ex) {
     }
   }
@@ -280,6 +288,9 @@ export class FiveElementsComponent {
     const time = GLOBALS.cfgFiveElements.prologDuration;
     GLOBALS.elem5Page = 'prolog';
     if (type === 'end') {
+      clearTimeout(GLOBALS._timeoutHandle);
+      GLOBALS._timeoutHandle = null;
+      this.animPrologText = '';
       this.prologText = '<div>Das waren die 5 Elemente</div><div>Vielen Dank für die Teilnahme</div>';
       this.animFootLeft = null;
       this.animFootRight = null;
@@ -287,10 +298,11 @@ export class FiveElementsComponent {
         clearTimeout(GLOBALS._timeoutHandle);
         GLOBALS._timeoutHandle = null;
         GLOBALS.viewElemStyle = '';
-        GLOBALS.currElemStyle = '';
-        GLOBALS.nextElemStyle = '';
+        GLOBALS.currElemAnim = '';
+        GLOBALS.nextElemAnim = '';
+        GLOBALS.currElement = null;
         GLOBALS.elem5Page = null;
-      }, time);
+      }, Math.max(time, 5000));
       return;
     }
     const stepLength = 130;
@@ -322,7 +334,48 @@ export class FiveElementsComponent {
 
   clickReplay(evt: MouseEvent) {
     evt?.stopPropagation();
-    this.animId = null;
-    this.initSeason(GLOBALS.currElement, 10);
+    GLOBALS.animId = 'none';
+    GLOBALS._quizIdx = 0;
+    // this.initSeason(GLOBALS.currElement, 10);
+  }
+
+  classForElement(id: string): string[] {
+    const ret: string[] = [];
+    if (GLOBALS.animShowQuiz) {
+      if (id === GLOBALS.currElement && GLOBALS._quizIdx === GLOBALS.markProps.findIndex(p => p === 'Farbe') + 1) {
+        ret.push(`anim-quiz-elem`);
+      }
+    }
+    return ret;
+  }
+
+  classForImage(id: string): string[] {
+    const ret: string[] = [];
+    if (GLOBALS.animShowQuiz) {
+      if (id === GLOBALS.currElement && GLOBALS._quizIdx === GLOBALS.markProps.findIndex(p => p === 'Farbe') + 1) {
+        ret.push(`anim-quiz-img`);
+      }
+    }
+    return ret;
+  }
+
+  classForProp(idx: number): string[] {
+    const ret: string[] = [];
+    if (GLOBALS.animShowQuiz) {
+      if (GLOBALS._quizIdx === idx) {
+        ret.push(`anim-quiz-prop`);
+      } else if (idx === GLOBALS._quizIdx - 1) {
+        ret.push(`anim-quiz-prop-end`);
+      }
+    }
+    return ret;
+  }
+
+  styleForQuiz(idx: number): any {
+    const ret: any = {};
+    if (GLOBALS.animShowQuiz && (GLOBALS._quizIdx === idx || GLOBALS._quizIdx === idx + 1)) {
+      ret.visibility = `visible`;
+    }
+    return ret;
   }
 }

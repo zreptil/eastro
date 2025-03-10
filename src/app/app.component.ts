@@ -8,7 +8,8 @@ import {LogService} from '@/_services/log.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  standalone: false
 })
 export class AppComponent {
   constructor(ss: StorageService,
@@ -16,7 +17,7 @@ export class AppComponent {
               sync: SyncService,
               public env: EnvironmentService) {
     LogService.cr = cr;
-    sync.onSetCredentialsToStorage = (value, isRefreshing) => {
+    sync.onSetCredentialsToStorage = (value, _isRefreshing) => {
       GLOBALS.oauth2AccessToken = value;
       GLOBALS.saveWebData();
     };

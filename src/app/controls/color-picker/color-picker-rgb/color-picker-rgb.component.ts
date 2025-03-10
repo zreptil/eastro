@@ -3,9 +3,10 @@ import {ColorPickerBaseComponent} from '@/controls/color-picker/color-picker-bas
 import {ColorUtils} from '@/controls/color-picker/color-utils';
 
 @Component({
-  selector: 'app-color-picker-rgb',
-  templateUrl: './color-picker-rgb.component.html',
-  styleUrls: ['./color-picker-rgb.component.scss']
+    selector: 'app-color-picker-rgb',
+    templateUrl: './color-picker-rgb.component.html',
+    styleUrls: ['./color-picker-rgb.component.scss'],
+    standalone: false
 })
 export class ColorPickerRGBComponent extends ColorPickerBaseComponent implements AfterViewInit {
   constructor() {

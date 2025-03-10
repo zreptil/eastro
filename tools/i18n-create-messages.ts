@@ -5,18 +5,21 @@ import * as path from 'path';
 // @ts-ignore
 import xliff from 'xliff';
 import {MessageId, TargetMessage} from '@angular/localize';
+import * as os from 'os';
 
-// const extract = require('extract-zip');
+const extract = require('extract-zip');
 
 const outFile = '../src/assets/messages.json';
 
 async function main() {
   try {
+    const filenames = ['eastro (translations)'];
+    for (const filename of filenames) {
+      let zipfile = getPath(`${os.homedir()}/Downloads/${filenames[0]}.zip`);
+      console.log('extracting', zipfile, '...');
+      await extract(zipfile, {dir: getPath('../temp')});
+    }
     createJson(['@en-GB'], []);
-    // let zipfile = getPath(`../${GLOBALS.appTitle} (translations).zip`);
-    // console.log('extracting', zipfile, '...');
-    // await extract(zipfile, {dir: getPath('../temp')});
-    // createJson(['@en-GB', 'en-US', 'de-DE'], []);
   } catch (ex) {
     console.error('error when creating messages', ex);
   }

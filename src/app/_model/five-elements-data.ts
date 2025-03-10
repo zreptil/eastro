@@ -3,6 +3,7 @@ import {BaseData} from '@/_model/base-data';
 export class FiveElementsData extends BaseData {
   animShowStatic = true;
   animShowAnimation = true;
+  animShowQuiz = true;
   animDuration = 0;
   prologDuration = 0;
   animWiggleDuration = 4;
@@ -17,7 +18,8 @@ export class FiveElementsData extends BaseData {
       c2: this.animDuration,
       c3: this.animShowAnimation,
       c4: this.animWiggleDuration,
-      c5: this.prologDuration
+      c5: this.prologDuration,
+      c6: this.animShowQuiz,
     }
   }
 
@@ -36,5 +38,6 @@ export class FiveElementsData extends BaseData {
     this.animShowAnimation = json['c3'] ?? true;
     this.animWiggleDuration = json['c4'] ?? 4;
     this.prologDuration = json['c5'] ?? 15000;
+    this.animShowQuiz = json['c6'] ?? true;
   }
 }

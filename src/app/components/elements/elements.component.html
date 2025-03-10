@@ -1,49 +1,61 @@
 <div [innerHTML]="globals?.svgCollection"></div>
-<div [ngStyle]="globals.styleForElement(globals.currElement, globals.currElement)" [ngSwitch]="globals.elemView">
-  <div *ngSwitchCase="0" elemview panel>
-    <div name>{{globals.nameForElement(globals.currElement)}}</div>
-    <div (click)="globals.toggleElemView()" [innerHtml]="calcElemRel()" relatement></div>
-  </div>
-  <div *ngSwitchCase="1" elemview panel>
-    <div name>{{globals.nameForElement(globals.currElement)}}</div>
-    <div elemrel>
-      <img (click)="globals.toggleElemView()" [src]="imgForElement('curr')" alt="current element" current>
-      <img (click)="globals.activate('createdBy')" [src]="imgForElement('createdBy')" alt="element 1" createdby>
-      <img (click)="globals.activate('creates')" [src]="imgForElement('creates')" alt="element 2" creates>
-      <img (click)="globals.activate('destroyedBy')" [src]="imgForElement('destroyedBy')" alt="element 3" destroyedby>
-      <img (click)="globals.activate('destroys')" [src]="imgForElement('destroys')" alt="element 4" destroys>
-      <svg [ngStyle]="globals.styleForElement('createdBy', globals.currElement)" createdby viewBox="0 0 511 511">
-        <use href="#hand"/>
-      </svg>
-      <svg [ngStyle]="globals.styleForElement('curr', globals.currElement)" creates viewBox="0 0 511 511">
-        <use href="#hand"/>
-      </svg>
-      <svg [ngStyle]="globals.styleForElement('curr', globals.currElement)" destroys viewBox="0 0 512 512">
-        <use href="#fist"/>
-      </svg>
-      <svg [ngStyle]="globals.styleForElement('destroyedBy', globals.currElement)" destroyedby viewBox="0 0 512 512">
-        <use href="#fist"/>
-      </svg>
-    </div>
-  </div>
-  <div *ngSwitchCase="2">
-    <div videoframe>
-      <div [style]="globals.viewElemStyle" elemview panel video>
-        <div (click)="globals.toggleElemView()" [style]="globals.currElemStyle" elemrelvideo>
-          <img (click)="globals.activateNextElement($event)" [src]="imgForElement('curr')" alt="current element" current>
-          <div timeout>{{globals.timeLeft}}</div>
-          <div name>{{globals.nameForElement(globals.currElement)}}</div>
-          <div *ngFor="let prop of markProps" prop>
-            <div propName>{{globals.markedProp(globals.currElement, prop).name}}</div>
-            <div propValue>{{globals.markedProp(globals.currElement, prop).property}}</div>
-          </div>
+<div [ngStyle]="globals.styleForElement(globals.currElement, globals.currElement, null, false)">
+  @switch (globals.elemView) {
+    @case (0) {
+      <div elemview panel>
+        <div name>{{ globals.nameForElement(globals.currElement) }}</div>
+        <div (click)="globals.toggleElemView()" [innerHtml]="calcElemRel()" relatement></div>
+      </div>
+    }
+    @case (1) {
+      <div elemview panel>
+        <div name>{{ globals.nameForElement(globals.currElement) }}</div>
+        <div elemrel>
+          <img (click)="globals.toggleElemView()" [src]="imgForElement('curr')" alt="current element" current>
+          <img (click)="globals.activate('createdBy')" [src]="imgForElement('createdBy')" alt="element 1" createdby>
+          <img (click)="globals.activate('creates')" [src]="imgForElement('creates')" alt="element 2" creates>
+          <img (click)="globals.activate('destroyedBy')" [src]="imgForElement('destroyedBy')" alt="element 3" destroyedby>
+          <img (click)="globals.activate('destroys')" [src]="imgForElement('destroys')" alt="element 4" destroys>
+          <svg [ngStyle]="globals.styleForElement('createdBy', globals.currElement, null, false)" createdby viewBox="0 0 511 511">
+            <use href="#hand"/>
+          </svg>
+          <svg [ngStyle]="globals.styleForElement('curr', globals.currElement, null, false)" creates viewBox="0 0 511 511">
+            <use href="#hand"/>
+          </svg>
+          <svg [ngStyle]="globals.styleForElement('curr', globals.currElement, null, false)" destroys viewBox="0 0 512 512">
+            <use href="#fist"/>
+          </svg>
+          <svg [ngStyle]="globals.styleForElement('destroyedBy', globals.currElement, null, false)" destroyedby viewBox="0 0 512 512">
+            <use href="#fist"/>
+          </svg>
         </div>
       </div>
-    </div>
-    <div *ngIf="globals._timeoutHandle!=null" progress>
-      <mat-progress-bar [value]="globals.progress"></mat-progress-bar>
-    </div>
-  </div>
+    }
+    @case (2) {
+      <div>
+        <div videoframe>
+          <div [style]="globals.viewElemStyle" elemview panel video>
+            <div (click)="globals.toggleElemView()"
+                 [style]="globals.styleForElement(globals.currElement, globals.currElement, globals.currElemAnim)"
+                 elemrelvideo>
+              <img (click)="globals.activateNextElement($event)" [src]="imgForElement('curr')" alt="current element" current>
+              <div timeout>{{ globals.timeLeft }}</div>
+              <div name>{{ globals.nameForElement(globals.currElement) }}</div>
+              <div *ngFor="let prop of globals.markProps; let idx = index" prop>
+                <div [innerHtml]="globals.markedProp(globals.currElement, idx, prop).name" propName></div>
+                <div [innerHtml]="globals.markedProp(globals.currElement, idx, prop).property" propValue></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        @if (globals._timeoutHandle != null) {
+          <div progress>
+            <mat-progress-bar [value]="globals.progress"></mat-progress-bar>
+          </div>
+        }
+      </div>
+    }
+  }
 </div>
 <div panel>
   <div property-panel>
@@ -51,8 +63,8 @@
          *ngFor="let prop of globals.propsForElement(globals.currElement)"
          [class]="classForProp(prop)"
          property>
-      <div name>{{prop.name}}</div>
-      <div value>{{prop.property}}</div>
+      <div name>{{ prop.name }}</div>
+      <div value>{{ prop.property }}</div>
     </div>
   </div>
 </div>

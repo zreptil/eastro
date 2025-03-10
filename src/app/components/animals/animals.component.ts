@@ -1,9 +1,10 @@
-import {Component, Inject, Input} from '@angular/core';
+import {Component, Inject, Injectable, Input} from '@angular/core';
 import {EventData} from '@/_model/event-data';
 import {GLOBALS, GlobalsService} from '@/_services/globals.service';
 import {Utils} from '@/classes/utils';
 import {DateAdapter, MAT_DATE_LOCALE, NativeDateAdapter} from '@angular/material/core';
 
+@Injectable()
 export class GermanDateAdapter extends NativeDateAdapter {
   override parse(value: any): Date | null {
     if ((typeof value === 'string') && (value.indexOf('.') > -1)) {
@@ -22,7 +23,8 @@ export class GermanDateAdapter extends NativeDateAdapter {
   selector: 'app-animals',
   templateUrl: './animals.component.html',
   styleUrls: ['./animals.component.scss'],
-  providers: [{provide: MAT_DATE_LOCALE, useValue: 'de-DE'}, {provide: DateAdapter, useClass: GermanDateAdapter}]
+  providers: [{provide: MAT_DATE_LOCALE, useValue: 'de-DE'}, {provide: DateAdapter, useClass: GermanDateAdapter}],
+  standalone: false
 })
 export class AnimalsComponent {
 

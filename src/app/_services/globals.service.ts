@@ -54,15 +54,19 @@ export class GlobalsService {
     Weiss: {fill: 'var(--elem-4-back)', text: 'var(--elem-4-fore)'},
     Blau: {fill: 'var(--elem-5-back)', text: 'var(--elem-5-fore)'}
   };
-  _timeoutHandle: number;
+  _timeoutHandle: any;
   _nextChange: number;
+  _quizIdx = 1000;
+  markProps: string[] = [];
   progress: number;
   elemView: number = 2;
-  currElemStyle: string;
-  nextElemStyle: string;
+  currElemAnim: string;
+  nextElemAnim: string;
   viewElemStyle: string;
   elem5Page: string = null;
   cfgFiveElements: FiveElementsData;
+  seasonAnimationTimeout = 750;
+  animId: string;
   private flags = '';
 
   constructor(public http: HttpClient,
@@ -175,6 +179,15 @@ export class GlobalsService {
     this.saveSharedData();
   }
 
+  get animShowQuiz(): boolean {
+    return this.cfgFiveElements.animShowQuiz;
+  }
+
+  set animShowQuiz(value: boolean) {
+    this.cfgFiveElements.animShowQuiz = value;
+    this.saveSharedData();
+  }
+
   _timeLeft: string;
 
   get timeLeft(): string {
@@ -183,6 +196,16 @@ export class GlobalsService {
 
   get nextElement(): string {
     return this.getElement(this.currElement, 'creates');
+  }
+
+  get isQuizActive(): boolean {
+    return this._quizIdx <= this.markProps.length;
+  }
+
+  initSeasonAnimation(elem: string) {
+    setTimeout(() => {
+      this.animId = GLOBALS.propsForElement(elem)?.find(p => p.name === 'Jahreszeit')?.property;
+    }, this.seasonAnimationTimeout);
   }
 
   durationText(duration: number): string {
@@ -201,27 +224,54 @@ export class GlobalsService {
 
   clickPlay(doInit: boolean, onElemChange?: (elem: string) => void) {
     if (doInit) {
-      this._nextChange = new Date().getTime() + this.cfgFiveElements.animDuration;
+      let addTime = this.cfgFiveElements.animDuration;
+      if (GLOBALS.animShowQuiz) {
+        addTime /= (this.markProps.length + 1);
+        if (this.currElement === '4') {
+//          addTime = 3000;
+        }
+      }
+      this._quizIdx = 0;
+      this.animId = 'none';
+      this._nextChange = new Date().getTime() + addTime;
       this.progress = 0;
       this._timeLeft = '';
     }
-    this._timeoutHandle = setTimeout(() => this.doStep(onElemChange), 900);
+    this._timeoutHandle = setTimeout(() => this.doStep(onElemChange), 1000);
   }
 
   doStep(onElemChange?: (elem: string) => void) {
     if (this.elem5Page != null) {
       return;
     }
-    const timeout = 900;
+    const timeout = 1000;
     const now = new Date().getTime();
-    this.progress = (1 - (this._nextChange - now - timeout) / this.cfgFiveElements.animDuration) * 100;
-    const left = Math.floor(Math.max(0, (this._nextChange - now) / 1000));
+    let addTime = this.cfgFiveElements.animDuration;
+    let nc = this._nextChange;
+    if (GLOBALS.animShowQuiz) {
+      addTime /= (this.markProps.length + 1);
+      if (this.isQuizActive) {
+        nc = this._nextChange + addTime * (this.markProps.length - this._quizIdx);
+      }
+    }
+    this.progress = (1 - (nc - now - timeout) / this.cfgFiveElements.animDuration) * 100;
+    const left = Math.floor(Math.max(0, (nc - now) / 1000));
     const m = Math.floor(left / 60);
     const s = `${left % 60}`.padStart(2, '0');
     this._timeLeft = `${m}:${s}`;
     if (now >= this._nextChange) {
-      this.activateNextElement(null, onElemChange);
-      this._nextChange = new Date().getTime() + this.cfgFiveElements.animDuration;
+      if (GLOBALS.animShowQuiz) {
+        if (this.markProps?.[this._quizIdx] === 'Jahreszeit') {
+          GLOBALS.initSeasonAnimation(this.currElement);
+        }
+        this._quizIdx++;
+        if (!this.isQuizActive) {
+          this.activateNextElement(null, onElemChange);
+        }
+      } else {
+        this.activateNextElement(null, onElemChange);
+      }
+      this._nextChange = new Date().getTime() + addTime;
       this.progress = 0;
     }
     this.clickPlay(false, onElemChange);
@@ -250,15 +300,25 @@ export class GlobalsService {
         return;
       }
       const duration = 2;
-      this.currElemStyle = `fadeOut ${duration}s ease-in-out normal`;
-      this.nextElemStyle = `fadeIn ${duration}s ease-in-out normal`;
-      this.viewElemStyle = `--ad:${duration / 2}s;animation:fadeColor ${duration}s ease-in-out normal;--bf:var(--elem-${this.currElement}-back);--bt:var(--elem-${nextElement}-back);--ff:var(--elem-${this.currElement}-fore);--ft:var(--elem-${nextElement}-fore)`;
+      // const elemId = GLOBALS.animShowQuiz ? 'quiz' : nextElement;
+      this.currElemAnim = `fadeOut ${duration}s ease-in-out normal`;
+      this.nextElemAnim = `fadeIn ${duration}s ease-in-out normal`;
+      // this.viewElemStyle =
+      //   `--ad:${duration / 2}s;` +
+      //   `--bf:var(--elem-${this.currElement}-back);` +
+      //   `--ff:var(--elem-${this.currElement}-fore);` +
+      //   `--bt:var(--elem-${elemId}-back);` +
+      //   `--ft:var(--elem-${elemId}-fore)` +
+      //   `animation:fadeColor ${duration}s ease-in-out normal;`;
+      // will set the next element to the current element
+      // onElemChange is either not set or FiveElementsComponent.initSeason
+      this._quizIdx = 0;
       setTimeout(() => {
         this.currElement = nextElement;
         onElemChange?.(this.currElement);
         this.viewElemStyle = '';
-        this.currElemStyle = '';
-        this.nextElemStyle = '';
+        this.currElemAnim = '';
+        this.nextElemAnim = '';
       }, duration * 1000);
     } else {
       this.currElement = nextElement;
@@ -277,15 +337,16 @@ export class GlobalsService {
 
   clickStop(evt: MouseEvent) {
     evt?.stopPropagation();
-    this.currElement = null;
     clearTimeout(this._timeoutHandle);
     this._timeoutHandle = null;
+    this.currElement = null;
     this._timeLeft = '';
+    this._quizIdx = this.markProps.length + 1;
   }
 
   changeAnimDuration(evt: MouseEvent) {
     evt?.stopPropagation();
-    const list = [5, 10, 20, 60, 90, 120, 300];
+    const list = [5, 10, 20, 30, 60, 90, 120, 300];
     const idx = list.findIndex(l => l === this.cfgFiveElements.animDuration / 1000);
     if (idx < 0) {
       this.animDuration = list[0] * 1000;
@@ -310,23 +371,33 @@ export class GlobalsService {
     return elem?.[idx] ?? element;
   }
 
-  markedProp(element: string, value: string) {
-    const ret = this.propsForElement(element)?.find(p => p.name === value);
+  markedProp(element: string, idx: number, value: string, useQuiz = false) {
+    let ret = this.propsForElement(element)?.find(p => p.name === value);
     if (ret != null) {
       const parts = ret.property.split(',');
       if (parts.length > 1) {
-        return {name: ret.name, property: parts[0]};
+        ret = {name: ret.name, property: parts[0]};
+      }
+    }
+    if (GLOBALS.animShowQuiz && useQuiz) {
+      ret = {...ret, quiz: idx === this._quizIdx - 1 ? ret?.property : '???'};
+      if (idx > this._quizIdx - 2) {
+        ret = {...ret, property: this.sanitizer.bypassSecurityTrustHtml('&nbsp;')};
       }
     }
     return ret ?? {};
   }
 
-  imgForElement(baseElement: string, idx: string): string {
+  imgForElement(baseElement: string, idx: string, useQuiz = true): string {
     let key = baseElement;
     if (idx !== 'curr') {
       key = this.zodiacData?.elements?.[baseElement]?.[idx] ?? baseElement;
     }
-    return `assets/images/elements/clear/${key}.png`;
+    let directory = 'clear';
+    if (GLOBALS.animShowQuiz && useQuiz && this.markProps?.indexOf('Farbe') >= this._quizIdx) {
+      key = 'quiz';
+    }
+    return `assets/images/elements/${directory}/${key}.png`;
   }
 
   public propsForElement(id: string | number): any[] {
@@ -516,14 +587,35 @@ export class GlobalsService {
     return ret <= 0 ? 12 + ret : ret;
   }
 
-  styleForElement(idx: string, def: string, anim?: string): any {
+  styleForElement(idx: string, def: string, anim?: string, useQuiz = true): any {
     const elem = this.zodiacData?.elements?.[def];
     let key = elem?.[idx] ?? def;
     const prop = this.propsForElement(key)?.find((p: any) => p.name === 'Farbe');
-    const color = this.colors[prop?.['property']] ?? {fill: 'initial', text: 'black'};
-    const ret: any = {'--hand-fill': color.fill, '--fist-fill': color.fill, '--text': color.text};
+    let color = this.colors[prop?.['property']] ?? {fill: 'initial', text: 'black'};
+    const ret: any = {};
+    // ret['--hand-fill'] = color.fill;
+    // ret['--fist-fill'] = color.fill;
+    // ret['--text'] = color.text;
     if (!Utils.isEmpty(anim)) {
       ret['animation'] = anim;
+      if (idx === this.currElement || !GLOBALS.animShowQuiz) {
+        ret['--hand-fill'] = color.fill;
+        ret['--fist-fill'] = color.fill;
+        ret['--text'] = color.text;
+      }
+    } else {
+      if (GLOBALS.animShowQuiz && useQuiz && this.markProps?.indexOf('Farbe') >= this._quizIdx) {
+        color = {
+          fill: 'silver',
+          text: 'black'
+        }
+      }
+      ret['--hand-fill'] = color.fill;
+      ret['--fist-fill'] = color.fill;
+      ret['--text'] = color.text;
+      // if (GLOBALS.animShowQuiz && useQuiz && this._quizIdx === 0) {
+      //   ret['filter'] = 'grayscale(100%)';
+      // }
     }
     return ret;
   }

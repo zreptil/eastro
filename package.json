@@ -5,7 +5,8 @@
   "scripts": {
     "build": "ng build",
     "i18n-01-extract": "ng extract-i18n app --output-path src/locale --out-file messages.en-GB.xliff --format xliff --progress",
-    "i18n-02-upload-english": "start https://crowdin.com/project/planimal/content/files",
+    "i18n-02-upload-english": "start https://crowdin.com/project/eastro/content/files",
+    "i18n-12-extract-and-upload-english": "npm run i18n-01-extract && npm run i18n-02-upload-english",
     "i18n-03-create-messages": "tsc tools/i18n-create-messages.ts && node tools/i18n-create-messages.js",
     "i18n": "npm run i18n-01-extract && npm run i18n-03-create-messages",
     "ng": "ng",
@@ -14,28 +15,28 @@
     "watch": "ng build --watch --configuration development"
   },
   "dependencies": {
-    "@angular/animations": "^16.2.11",
-    "@angular/cdk": "^16.2.10",
-    "@angular/common": "^16.2.11",
-    "@angular/compiler": "^16.2.11",
-    "@angular/core": "^16.2.11",
-    "@angular/forms": "^16.2.11",
-    "@angular/material": "^16.2.10",
-    "@angular/platform-browser": "^16.2.11",
-    "@angular/platform-browser-dynamic": "^16.2.11",
-    "@angular/router": "^16.2.11",
+    "@angular/animations": "^19.2.1",
+    "@angular/cdk": "^19.2.2",
+    "@angular/common": "^19.2.1",
+    "@angular/compiler": "^19.2.1",
+    "@angular/core": "^19.2.1",
+    "@angular/forms": "^19.2.1",
+    "@angular/material": "^19.2.2",
+    "@angular/platform-browser": "^19.2.1",
+    "@angular/platform-browser-dynamic": "^19.2.1",
+    "@angular/router": "^19.2.1",
     "base64-arraybuffer": "^1.0.2",
     "extract-zip": "^2.0.1",
     "fast-sha256": "^1.3.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.13.3"
+    "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^16.2.8",
-    "@angular/cli": "~16.2.8",
-    "@angular/compiler-cli": "^16.2.11",
-    "@angular/localize": "^16.2.11",
+    "@angular-devkit/build-angular": "^19.2.1",
+    "@angular/cli": "~19.2.1",
+    "@angular/compiler-cli": "^19.2.1",
+    "@angular/localize": "^19.2.1",
     "@types/jasmine": "~4.3.0",
     "jasmine-core": "~4.5.0",
     "karma": "~6.4.0",
@@ -43,10 +44,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
-    "typescript": "~4.9.4",
+    "typescript": "~5.8.2",
     "xliff": "^6.1.0"
-  },
-  "overrides": {
-    "semver": "~7.5.3"
   }
 }

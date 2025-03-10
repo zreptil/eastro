@@ -35,12 +35,13 @@ export class AnimationData {
 @Component({
   selector: 'app-animator',
   templateUrl: './animator.component.html',
-  styleUrls: ['./animator.component.scss']
+  styleUrls: ['./animator.component.scss'],
+  standalone: false
 })
 export class AnimatorComponent {
   public animationString: SafeHtml;
   fadeAnimStatic = false;
-  private _nextHandle: number;
+  private _nextHandle: any;
 
   constructor(public sanitizer: DomSanitizer) {
     this.initAnimation();

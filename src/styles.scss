@@ -150,12 +150,14 @@ body {
   --card-current-back: rgba(255, 255, 255, 0.5);
   --card-name-fore: rgba(0, 0, 0, 0.8);
 
+  --elem-quiz-back: #a0a0a0;
   --elem-1-back: #808152;
   --elem-2-back: #bd0e0d;
   --elem-3-back: #d09c15;
   --elem-4-back: #c7b0b3;
   --elem-5-back: #4d4797;
 
+  --elem-quiz-fore: #ffffff;
   --elem-1-fore: rgba(255, 255, 255, 0.8);
   --elem-2-fore: rgba(255, 255, 255, 0.8);
   --elem-3-fore: rgba(0, 0, 0, 0.7);
@@ -386,29 +388,35 @@ div[property-panel] {
 @keyframes fadeIn {
   0% {
     opacity: 0.0;
+    scale: 0;
   }
   100% {
     opacity: 1.0;
+    scale: 1;
   }
 }
 
 @keyframes fadeOut {
   0% {
     opacity: 1.0;
+    scale: 1;
+    transform: rotate(0deg);
   }
   100% {
     opacity: 0.0;
+    scale: 0;
+    transform: rotate(-360deg);
   }
 }
 
 @keyframes fadeColor {
   0% {
-    color: var(--ff);
-    background-color: var(--bf);
+    color: black;
+    background-color: silver;
   }
   100% {
-    color: var(--ft);
-    background-color: var(--bt);
+    color: var(--text);
+    background-color: var(--fist-fill);
   }
 }
 
@@ -476,6 +484,26 @@ div[property-panel] {
   }
 }
 
+@keyframes prop-value-animation {
+  0% {
+    font-size: 0;
+  }
+  100% {
+    font-size: 4em;
+  }
+}
+
+@keyframes prop-value-animation-end {
+  0% {
+    font-size: 0;
+    transform: rotateZ(-360deg);
+  }
+  100% {
+    font-size: 3.5em;
+    transform: rotateZ(0deg);
+  }
+}
+
 @keyframes footBack {
   0% {
     transform: translateX(var(--x)) rotate(0);
@@ -508,7 +536,11 @@ div[property-panel] {
   }
 }
 
-.mat-mdc-slide-toggle.mat-accent {
+html .mat-mdc-slide-toggle {
+  --mat-switch-label-text-color: silver;
+}
+
+html .mat-mdc-slide-toggle.mat-accent {
   --mdc-switch-selected-focus-state-layer-color: var(--5elemstart-toggle-on);
   --mdc-switch-selected-handle-color: var(--5elemstart-toggle-on);
   --mdc-switch-selected-hover-state-layer-color: var(--5elemstart-toggle-on);

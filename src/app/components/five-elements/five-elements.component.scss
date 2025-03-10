@@ -19,7 +19,7 @@
     font-weight: bold;
     background-color: var(--prolog-back);
     color: var(--prolog-fore);
-    background-image: url("/assets/images/prolog-back.png");
+    background-image: url("../../../assets/images/prolog-back.png");
     background-size: 700px;
 
     [row] {
@@ -161,6 +161,10 @@
       opacity: 1;
     }
 
+    [elemView].anim-quiz-elem {
+      animation: fadeColor 2s ease-in-out forwards;
+    }
+
     [elemView] {
       position: absolute;
       display: flex;
@@ -190,6 +194,14 @@
             align-items: center;
             justify-content: center;
             position: relative;
+
+            img.anim-quiz-img {
+              animation: fadeIn 2s ease-in-out forwards;
+            }
+
+            img {
+              border-radius: 2em;
+            }
           }
 
           [name] {
@@ -219,10 +231,24 @@
             padding: 1em;
             gap: 1em;
             flex: 1;
+            overflow: hidden;
+
+            .anim-quiz-prop {
+              [propQuiz] {
+                animation: prop-value-animation 2s ease-in-out alternate infinite;
+              }
+            }
+
+            .anim-quiz-prop-end {
+              [propQuiz] {
+                animation: prop-value-animation-end 2s ease-in-out forwards;
+              }
+            }
 
             [prop] {
               display: flex;
               flex-flow: column wrap;
+              position: relative;
 
               [propName] {
                 font-size: 2em;
@@ -230,6 +256,17 @@
 
               [propValue] {
                 font-size: 3.5em;
+                font-weight: bold;
+                padding-top: 0;
+                width: 3em;
+              }
+
+              [propQuiz] {
+                visibility: hidden;
+                position: absolute;
+                left: 0;
+                top: 38px;
+                padding-top: 0;
                 font-weight: bold;
               }
             }
