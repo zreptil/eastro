@@ -10,11 +10,11 @@
       </button>
       <div controls name>Die fünf Elemente</div>
       <div controls>
-        <button (click)="activateElement($event, elem)"
-                *ngFor="let elem of ['4', '5', '1', '2', '3']"
-                mat-button>
-          <img [src]="globals.imgForElement(elem, 'curr', false)" alt="element">
-        </button>
+        @for (elem of ['4', '5', '1', '2', '3']; track $index) {
+          <button (click)="activateElement($event, elem)" mat-button>
+            <img [src]="globals.imgForElement(elem, 'curr', false)" alt="element">
+          </button>
+        }
       </div>
       @if (globals._timeoutHandle == null) {
         <div group>
